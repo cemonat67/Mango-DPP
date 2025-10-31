@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSP Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+
+    
+    
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <!-- Navigation brand href fix -->
+            <a class="navbar-brand" href="/dashboard">
+                <div class="brand-icon">
+                    <img src="/static/images/logo.png" alt="Zero@Design Logo" class="logo-img">
+                </div>
+                <div class="brand-text">
+                    <div class="brand-title">Zero@Design</div>
+                    <div class="brand-subtitle">Health Sustainability Passport</div>
+                </div>
+            </a>
+
+            <!-- Navbar Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                </ul>
+
+                <!-- Action Buttons -->
+                <div class="navbar-actions">
+                    <!-- Language Selector -->
+                    <div class="lang">
+                        <span class="pill">TR</span>
+                        <span class="pill active" style="background: var(--brand); color: white;">EN</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+<div class="wrap">
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="row">
+            <div class="seg">
+                <button onclick="window.location.href='/'">Dashboard</button>
+                <button onclick="window.location.href='/analytics'">Analytics</button>
+                <button onclick="window.location.href='/design'">Design</button>
+                <button onclick="window.location.href='/analyze'">Analyze</button>
+                <button onclick="window.location.href='/optimize'">Optimize</button>
+                <button onclick="window.location.href='/report'">Report</button>
+                <button onclick="window.location.href='/export'">Export</button>
+                <button onclick="window.location.href='/settings/'">Settings</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Additional Navigation Row -->
+    <div class="hero">
+        <div class="row secondary">
+            <div class="seg">
+                <button onclick="window.location.href='/benchmark'">Benchmark</button>
+                <button class="active">Style Card</button>
+                <button onclick="window.location.href='/collection'">Collection</button>
+                <button onclick="window.location.href='/dpp'">DPP/NFT</button>
+                <button onclick="window.location.href='/blockchain_status'">Blockchain</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="card">
+        <div class="card-header">
+            <h3>
+                <i class="fas fa-palette me-2"></i>Stil Kartı Oluştur
+            </h3>
+            <p class="text-muted small mb-0 mt-2">Lif yüzdesi, gramaj ve işlem seti girilebilen stil kartı</p>
+        </div>
+    </div>
+</div>
+
+<form id="styleCardForm">
+    <div class="grid">
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    <i class="fas fa-info-circle me-2"></i>Temel Bilgiler
+                </h3>
+            </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ürün Adı *</label>
+                            <input type="text" class="form-control" id="productName" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Cinsiyet *</label>
+                            <select class="form-select" id="productGender" required>
+                                <option value="">Seçiniz...</option>
+                                <option value="Women">Kadın</option>
+                                <option value="Men">Erkek</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ürün Kategorisi *</label>
+                            <select class="form-select" id="productCategory" required>
+                                <option value="">Önce cinsiyet seçiniz...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ürün Tipi *</label>
+                            <select class="form-select" id="productType" required>
+                                <option value="">Önce kategori seçiniz...</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Hedef Pazar</label>
+                            <select class="form-select" id="targetMarket">
+                                <option value="yerel">Yerel</option>
+                                <option value="ulusal">Ulusal</option>
+                                <option value="avrupa">Avrupa</option>
+                                <option value="global">Global</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Sezon</label>
+                            <select class="form-select" id="season">
+                                <option value="ilkbahar">İlkbahar</option>
+                                <option value="yaz">Yaz</option>
+                                <option value="sonbahar">Sonbahar</option>
+                                <option value="kis">Kış</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Gramaj (g/m²)</label>
+                            <input type="number" class="form-control" id="weight" min="50" max="800">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    <i class="fas fa-layer-group me-2"></i>Lif Kompozisyonu
+                </h3>
+            </div>
+                <div class="card-body">
+                    <div id="fiberComposition">
+                        <div class="fiber-row row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Lif Tipi</label>
+                                <select class="form-select fiber-type">
+                                    <option value="">Seçiniz...</option>
+                                    <option value="pamuk">Pamuk</option>
+                                    <option value="organik-pamuk">Organik Pamuk</option>
+                                    <option value="polyester">Polyester</option>
+                                    <option value="geri-donusturulmus-polyester">Geri Dönüştürülmüş Polyester</option>
+                                    <option value="viskon">Viskon</option>
+                                    <option value="tencel">Tencel</option>
+                                    <option value="yun">Yün</option>
+                                    <option value="keten">Keten</option>
+                                    <option value="elastan">Elastan</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Yüzde (%)</label>
+                                <input type="number" class="form-control fiber-percentage" min="1" max="100">
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeFiberRow(this)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="addFiberRow()">
+                        <i class="fas fa-plus me-1"></i>Lif Ekle
+                    </button>
+                    
+                    <div class="mt-3">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Toplam:</strong> <span id="totalPercentage">0</span>% 
+                            <span id="percentageWarning" class="text-danger ms-2" style="display: none;">
+                                (Toplam %100 olmalıdır)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    <i class="fas fa-cogs me-2"></i>İşlem Süreçleri
+                </h3>
+            </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Boyama İşlemleri</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="naturalDye">
+                                <label class="form-check-label" for="naturalDye">
+                                    Doğal Boyar Madde
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="lowImpactDye">
+                                <label class="form-check-label" for="lowImpactDye">
+                                    Düşük Etkili Boyar Madde
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="waterBasedDye">
+                                <label class="form-check-label" for="waterBasedDye">
+                                    Su Bazlı Boyama
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h6>Finishing İşlemleri</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="enzymaticWash">
+                                <label class="form-check-label" for="enzymaticWash">
+                                    Enzimatik Yıkama
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="ozoneTreatment">
+                                <label class="form-check-label" for="ozoneTreatment">
+                                    Ozon Uygulaması
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="laserTreatment">
+                                <label class="form-check-label" for="laserTreatment">
+                                    Lazer İşlemi
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="grid">
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    <i class="fas fa-calculator me-2"></i>CO₂ Hesaplama
+                </h3>
+            </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <div class="display-4 text-primary" id="totalCO2">0.0</div>
+                        <small class="text-muted">kg CO₂ eşdeğeri</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Dağılım</h6>
+                        <canvas id="co2BreakdownChart" width="300" height="200"></canvas>
+                    </div>
+                    
+                    <div id="co2Breakdown">
+                        <!-- CO₂ dağılımı buraya gelecek -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    <i class="fas fa-robot me-2"></i>AI Önerileri
+                </h3>
+            </div>
+                <div class="card-body">
+                    <button type="button" class="btn btn-primary btn-sm w-100 mb-3" onclick="getAISuggestions()">
+                        <i class="fas fa-magic me-1"></i>Önerileri Getir
+                    </button>
+                    
+                    <div id="aiSuggestions" style="display: none;">
+                        <!-- AI önerileri buraya gelecek -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    <i class="fas fa-award me-2"></i>Sürdürülebilirlik Skoru
+                </h3>
+            </div>
+                <div class="card-body text-center">
+                    <div class="display-1" id="sustainabilityScore">-</div>
+                    <div id="sustainabilityGrade" class="h4 mb-2">-</div>
+                    <small class="text-muted">100 üzerinden</small>
+                    
+                    <div class="mt-3">
+                        <div id="sustainabilityBadges">
+                            <!-- Rozetler buraya gelecek -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    
+    <div class="grid">
+        <div class="card">
+            <div class="card-body text-center">
+                <button type="submit" class="btn btn-success btn-lg me-3">
+                    <i class="fas fa-save me-2"></i>Stil Kartını Kaydet
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" onclick="resetForm()">
+                    <i class="fas fa-undo me-2"></i>Sıfırla
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-leaf"></i>
+                    <span>Zero@Design</span>
+                </div>
+                <div class="footer-text">
+                    Sürdürülebilir tasarım ve karbon ayak izi ölçümü için gelişmiş analitik platform
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Gizlilik</a>
+                    <a href="#" class="footer-link">Şartlar</a>
+                    <a href="#" class="footer-link">Destek</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    
+</body>
+</html>

@@ -1,689 +1,408 @@
-from fastapi import FastAPI, Request, Form, File, UploadFile, Depends
-from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+"""
+Zero@Design API — v0.3.7 (stable)
+- UUID veya 'code' ile ürün arar
+- JSON-safe hata yakalama (UPSTREAM, STORAGE, INTERNAL)
+- ReportLab PDF’te başlık + gri çizgi + detay
+- Storage (SUPABASE_SERVICE_ROLE) varsa signed URL döner
+"""
+
+import os, io, re, time
+import httpx
+from dotenv import load_dotenv
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-import urllib.parse
-from sqlalchemy.orm import Session
-import qrcode
-import io
-import base64
-import json
-import uuid
-from datetime import datetime
-from typing import Optional, List
-import os
-from web3 import Web3
-from eth_account import Account
-import hashlib
-import openai
-import keyring
-import asyncio
-import aiohttp
+from pydantic import BaseModel
 
-# Database imports
-from database import get_db, init_db
-from models import Collection, Style, NFTPassport, Supplier
-from translations import get_text, get_all_texts
+# === Load .env ===
+load_dotenv()
 
-app = FastAPI(title="Mango DPP - Digital Product Platform")
+APP_NAME = "Zero@Design FAZ 1.2 API"
+VERSION = "0.3.7"
 
-# CORS ve encoding ayarları
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY", "")
+SUPABASE_SERVICE_ROLE = os.getenv("SUPABASE_SERVICE_ROLE", "")
+PDF_BUCKET = os.getenv("PDF_BUCKET", "reports")
+PDF_SIGNED_URL_EXPIRES = int(os.getenv("PDF_SIGNED_URL_EXPIRES", "3600"))
+DEBUG = os.getenv("APP_DEBUG", "0") in ("1", "true", "True")
+
+app = FastAPI(title=APP_NAME, version=VERSION)
+
+# CORS middleware ekle
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Geliştirme için tüm origin'lere izin ver
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Static files ve templates
-os.makedirs("static", exist_ok=True)
-os.makedirs("templates", exist_ok=True)
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
-
-# Initialize database on startup
-init_db()
-
-def fix_turkish_encoding(text):
-    """Fix Turkish character encoding issues"""
-    if not text:
-        return text
-    
-    # Common Turkish character fixes - comprehensive mapping
-    replacements = {
-        'Ä°': 'İ',  # Capital I with dot
-        'Ä±': 'ı',  # Lowercase dotless i
-        'Ã¼': 'ü',  # u with umlaut
-        'Ã–': 'Ö',  # Capital O with umlaut
-        'Ã¶': 'ö',  # o with umlaut
-        'Ã‡': 'Ç',  # Capital C with cedilla
-        'Ã§': 'ç',  # c with cedilla
-        'Åž': 'Ş',  # Capital S with cedilla
-        'ÅŸ': 'ş',  # s with cedilla
-        'Å ': 'Ş',  # Alternative Capital S with cedilla
-        'Å¡': 'ş',  # Alternative s with cedilla
-        'Åı': 'Şı', # Specific combination
-        'Åık': 'Şık', # Common word
-        'Äž': 'Ğ',  # Capital G with breve
-        'ÄŸ': 'ğ',  # g with breve
-        'GÃ¶z': 'Göz',  # Common word
-        'alÄ±cÄ±': 'alıcı',  # Common word
+# Global DPP storage (gerçek uygulamada veritabanı olacak)
+dpp_storage = [
+    {
+        "dpp_id": "dpp-001",
+        "product_name": "Organik Pamuk T-Shirt",
+        "category": "Tekstil",
+        "co2_footprint": 2.5,
+        "sustainability_score": 85,
+        "created_at": "2024-01-15T10:30:00Z"
+    },
+    {
+        "dpp_id": "dpp-002", 
+        "product_name": "Geri Dönüştürülmüş Polyester Ceket",
+        "category": "Giyim",
+        "co2_footprint": 4.2,
+        "sustainability_score": 78,
+        "created_at": "2024-01-20T14:15:00Z"
+    },
+    {
+        "dpp_id": "dpp-003",
+        "product_name": "Bambu Fiber Çorap",
+        "category": "Aksesuar", 
+        "co2_footprint": 1.1,
+        "sustainability_score": 92,
+        "created_at": "2024-01-25T09:45:00Z"
     }
-    
-    fixed_text = text
-    for wrong, correct in replacements.items():
-        fixed_text = fixed_text.replace(wrong, correct)
-    
-    return fixed_text
+]
 
-class MangoDPP:
-    def __init__(self):
-        self.setup_ai_client()
-    
-    def get_collections(self, db: Session):
-        return db.query(Collection).all()
-    
-    def get_styles(self, db: Session):
-        return db.query(Style).all()
-    
-    def get_nfts(self, db: Session):
-        return db.query(NFTPassport).all()
-        
-    def generate_qr_code(self, data: str) -> str:
-        """QR kod oluştur ve base64 string olarak döndür"""
-        qr = qrcode.QRCode(version=1, box_size=10, border=5)
-        qr.add_data(data)
-        qr.make(fit=True)
-        
-        img = qr.make_image(fill_color="black", back_color="white")
-        img_buffer = io.BytesIO()
-        img.save(img_buffer, format='PNG')
-        img_str = base64.b64encode(img_buffer.getvalue()).decode()
-        return f"data:image/png;base64,{img_str}"
-    
-    def create_nft_passport(self, product_data: dict) -> dict:
-        """NFT dijital pasaport oluştur"""
-        nft_id = str(uuid.uuid4())
-        
-        # NFT metadata
-        nft_data = {
-            "id": nft_id,
-            "product_code": product_data.get("code", ""),
-            "name": product_data.get("name", ""),
-            "collection": product_data.get("collection", ""),
-            "materials": product_data.get("materials", []),
-            "production_location": product_data.get("production_location", ""),
-            "carbon_footprint": product_data.get("carbon_footprint", 0),
-            "certificates": product_data.get("certificates", []),
-            "supplier": product_data.get("supplier", ""),
-            "created_at": datetime.now().isoformat(),
-            "blockchain_hash": hashlib.sha256(nft_id.encode()).hexdigest()
-        }
-        
-        # QR kod oluştur
-        qr_data = f"https://mangodpp.com/passport/{nft_id}"
-        nft_data["qr_code"] = self.generate_qr_code(qr_data)
-        nft_data["qr_url"] = qr_data
-        
-        # NFT'yi sakla
-        self.nfts[nft_id] = nft_data
-        
-        return nft_data
-    
-    def setup_ai_client(self):
-        """AI client kurulumu"""
-        try:
-            # Environment variable'dan al (cloud deployment için)
-            api_key = os.getenv("OPENAI_API_KEY")
-            
-            # Keyring'den OpenAI API key'i al (local development için)
-            if not api_key:
-                for key_name in ['OPENAI_API_KEY', 'openai_api_key', 'openai-api-key']:
-                    try:
-                        api_key = keyring.get_password("memex", key_name)
-                        if api_key:
-                            break
-                    except:
-                        continue
-            
-            if api_key:
-                self.openai_client = openai.OpenAI(api_key=api_key)
-                self.ai_enabled = True
-            else:
-                self.ai_enabled = False
-                print("OpenAI API key bulunamadı. AI görsel oluşturma devre dışı.")
-        except Exception as e:
-            self.ai_enabled = False
-            print(f"AI client kurulum hatası: {e}")
-    
-    async def generate_product_image(self, style_data: dict) -> Optional[str]:
-        """AI ile ürün görseli oluştur"""
-        if not self.ai_enabled:
-            return None
-            
-        try:
-            # Ürün tanımını oluştur
-            prompt = self.create_image_prompt(style_data)
-            
-            # OpenAI DALL-E ile görsel oluştur
-            response = self.openai_client.images.generate(
-                model="dall-e-3",
-                prompt=prompt,
-                size="1024x1024",
-                quality="standard",
-                n=1,
-            )
-            
-            # Görsel URL'sini al
-            image_url = response.data[0].url
-            
-            # Görseli indir ve kaydet
-            image_path = await self.download_and_save_image(image_url, style_data["id"])
-            
-            return image_path
-            
-        except Exception as e:
-            print(f"AI görsel oluşturma hatası: {e}")
-            return None
-    
-    def create_image_prompt(self, style_data: dict) -> str:
-        """Stil verilerinden görsel prompt'u oluştur"""
-        category = style_data.get("category", "giyim")
-        materials = ", ".join(style_data.get("materials", []))
-        name = style_data.get("name", "ürün")
-        
-        # Kategori bazlı prompt oluştur
-        category_prompts = {
-            "Üst Giyim": "fashionable top, shirt, blouse, sweater",
-            "Alt Giyim": "stylish pants, trousers, jeans, skirt",
-            "Elbise": "elegant dress, fashionable dress",
-            "Dış Giyim": "jacket, coat, outerwear",
-            "Aksesuar": "fashion accessory, bag, scarf"
-        }
-        
-        base_prompt = category_prompts.get(category, "fashion item")
-        
-        prompt = f"""
-        Professional fashion photography of a {base_prompt} called '{name}'.
-        Made from {materials}.
-        Clean white background, studio lighting, high-quality fashion photography.
-        Modern, sustainable fashion design.
-        Commercial product photography style.
-        No text or watermarks.
-        """
-        
-        return prompt.strip()
-    
-    async def download_and_save_image(self, image_url: str, style_id: str) -> str:
-        """Görseli indir ve kaydet"""
-        try:
-            os.makedirs("static/images", exist_ok=True)
-            
-            async with aiohttp.ClientSession() as session:
-                async with session.get(image_url) as response:
-                    if response.status == 200:
-                        image_data = await response.read()
-                        
-                        # Dosya yolunu oluştur
-                        filename = f"product_{style_id}.png"
-                        filepath = f"static/images/{filename}"
-                        
-                        # Dosyayı kaydet
-                        with open(filepath, 'wb') as f:
-                            f.write(image_data)
-                        
-                        return f"/static/images/{filename}"
-            
-        except Exception as e:
-            print(f"Görsel indirme hatası: {e}")
-            return None
-    
-    def calculate_carbon_footprint(self, materials: List[str], production_location: str, transport: str) -> float:
-        """Karbon ayak izi hesapla (basitleştirilmiş)"""
-        base_carbon = 2.5  # kg CO2
-        
-        # Malzeme bazlı katsayılar
-        material_factors = {
-            "pamuk": 1.2,
-            "polyester": 2.1,
-            "yün": 3.8,
-            "ipek": 2.9,
-            "keten": 0.9,
-            "organik_pamuk": 0.8
-        }
-        
-        # Lokasyon bazlı katsayılar
-        location_factors = {
-            "türkiye": 1.0,
-            "hindistan": 1.8,
-            "çin": 2.2,
-            "bangladeş": 1.9,
-            "vietnam": 1.7
-        }
-        
-        material_carbon = sum([material_factors.get(mat.lower(), 1.0) for mat in materials])
-        location_carbon = location_factors.get(production_location.lower(), 1.0)
-        
-        total_carbon = base_carbon * material_carbon * location_carbon
-        return round(total_carbon, 2)
+UUID_RE = re.compile(r"^[0-9a-fA-F-]{36}$")
 
-mango_dpp = MangoDPP()
 
-def get_language(request: Request) -> str:
-    """Get current language from cookie or default to Turkish"""
-    return request.cookies.get("language", "tr")
+# === Helpers ===
+def _supabase_headers(jwt: str):
+    return {"apikey": jwt, "Authorization": f"Bearer {jwt}"}
 
-@app.get("/")
-async def dashboard(request: Request, db: Session = Depends(get_db)):
-    """Ana dashboard"""
-    lang = get_language(request)
-    collections = mango_dpp.get_collections(db)
-    styles = mango_dpp.get_styles(db)
-    nfts = mango_dpp.get_nfts(db)
-    
-    stats = {
-        "total_collections": len(collections),
-        "total_styles": len(styles),
-        "total_samples": 0,  # Placeholder
-        "total_nfts": len(nfts)
-    }
-    
-    response = templates.TemplateResponse("dashboard.html", {
-        "request": request, 
-        "stats": stats,
-        "collections": collections[:5],
-        "lang": lang,
-        "t": get_all_texts(lang)
-    })
-    response.headers["Content-Type"] = "text/html; charset=utf-8"
-    return response
 
-@app.post("/set-language")
-async def set_language(language: str = Form(...)):
-    """Set language preference"""
-    response = JSONResponse({"success": True, "language": language})
-    response.set_cookie("language", language, max_age=31536000)  # 1 year
-    return response
+class ReportIn(BaseModel):
+    product_id: str
 
-@app.get("/collections")
-async def collections_page(request: Request, db: Session = Depends(get_db)):
-    """Koleksiyonlar sayfası"""
-    lang = get_language(request)
-    collections = mango_dpp.get_collections(db)
-    response = templates.TemplateResponse("collections.html", {
-        "request": request,
-        "collections": collections,
-        "lang": lang,
-        "t": get_all_texts(lang)
-    })
-    response.headers["Content-Type"] = "text/html; charset=utf-8"
-    return response
 
-@app.post("/collections")
-async def create_collection(
-    name: str = Form(...),
-    season: str = Form(...),
-    year: int = Form(...),
-    description: str = Form(...),
-    db: Session = Depends(get_db)
-):
-    """Yeni koleksiyon oluştur"""
-    collection_id = str(uuid.uuid4())
-    
-    # Fix Turkish character encoding
-    name = fix_turkish_encoding(name)
-    season = fix_turkish_encoding(season)
-    description = fix_turkish_encoding(description)
-    
-    collection = Collection(
-        id=collection_id,
-        name=name,
-        season=season,
-        year=year,
-        description=description
-    )
-    
-    db.add(collection)
-    db.commit()
-    db.refresh(collection)
-    
-    return JSONResponse({"success": True, "collection_id": collection_id})
-
-@app.get("/styles")
-async def styles_page(request: Request, db: Session = Depends(get_db)):
-    """Stiller sayfası"""
-    lang = get_language(request)
-    styles = mango_dpp.get_styles(db)
-    collections = mango_dpp.get_collections(db)
-    
-    response = templates.TemplateResponse("styles.html", {
-        "request": request,
-        "styles": styles,
-        "collections": collections,
-        "lang": lang,
-        "t": get_all_texts(lang)
-    })
-    response.headers["Content-Type"] = "text/html; charset=utf-8"
-    return response
-
-@app.post("/styles")
-async def create_style(
-    name: str = Form(...),
-    collection_id: str = Form(...),
-    category: str = Form(...),
-    materials: str = Form(...),
-    target_price: float = Form(...),
-    production_location: str = Form(...),
-    supplier: str = Form(...),
-    generate_image: bool = Form(False),
-    db: Session = Depends(get_db)
-):
-    """Yeni stil oluştur"""
-    style_id = str(uuid.uuid4())
-    
-    # Fix Turkish character encoding
-    name = fix_turkish_encoding(name)
-    category = fix_turkish_encoding(category)
-    materials = fix_turkish_encoding(materials)
-    production_location = fix_turkish_encoding(production_location)
-    supplier = fix_turkish_encoding(supplier)
-    
-    materials_list = [m.strip() for m in materials.split(",")]
-    
-    # Karbon ayak izi hesapla
-    carbon_footprint = mango_dpp.calculate_carbon_footprint(
-        materials_list, production_location, "sea"
-    )
-    
-    style = Style(
-        id=style_id,
-        name=name,
-        collection_id=collection_id,
-        category=category,
-        materials=materials_list,
-        target_price=target_price,
-        production_location=production_location,
-        supplier=supplier,
-        carbon_footprint=carbon_footprint,
-        status="tasarım"
-    )
-    
-    # AI görsel oluştur (istenirse)
-    if generate_image and mango_dpp.ai_enabled:
-        try:
-            # Style dict oluştur AI için
-            style_dict = {
-                "id": style_id,
-                "name": name,
-                "category": category,
-                "materials": materials_list
-            }
-            image_path = await mango_dpp.generate_product_image(style_dict)
-            if image_path:
-                style.image_url = image_path
-                style.status = "görsel_oluşturuldu"
-        except Exception as e:
-            print(f"Görsel oluşturma hatası: {e}")
-    
-    db.add(style)
-    db.commit()
-    db.refresh(style)
-    
-    return JSONResponse({
-        "success": True, 
-        "style_id": style_id,
-        "image_generated": style.image_url is not None,
-        "ai_enabled": mango_dpp.ai_enabled
-    })
-
-@app.post("/generate-image/{style_id}")
-async def generate_style_image(style_id: str):
-    """Var olan stil için AI görsel oluştur"""
-    if style_id not in mango_dpp.styles:
-        return JSONResponse({"error": "Stil bulunamadı"}, status_code=404)
-    
-    if not mango_dpp.ai_enabled:
-        return JSONResponse({"error": "AI görsel oluşturma devre dışı. OpenAI API key gerekli."}, status_code=400)
-    
-    style = mango_dpp.styles[style_id]
-    
-    try:
-        image_path = await mango_dpp.generate_product_image(style)
-        if image_path:
-            style["image_url"] = image_path
-            style["status"] = "görsel_oluşturuldu"
-            mango_dpp.styles[style_id] = style
-            
-            return JSONResponse({
-                "success": True,
-                "image_url": image_path,
-                "message": "Görsel başarıyla oluşturuldu"
-            })
-        else:
-            return JSONResponse({"error": "Görsel oluşturulamadı"}, status_code=500)
-            
-    except Exception as e:
-        return JSONResponse({"error": f"Görsel oluşturma hatası: {str(e)}"}, status_code=500)
-
-@app.get("/passport/{nft_id}", response_class=HTMLResponse)
-async def nft_passport(request: Request, nft_id: str):
-    """NFT dijital pasaport görüntüle"""
-    if nft_id not in mango_dpp.nfts:
-        return templates.TemplateResponse("404.html", {"request": request})
-    
-    nft_data = mango_dpp.nfts[nft_id]
-    return templates.TemplateResponse("passport.html", {
-        "request": request,
-        "nft": nft_data
-    })
-
-@app.post("/generate-nft")
-async def generate_nft_passport(
-    style_id: str = Form(...),
-    certificates: str = Form(""),
-    additional_info: str = Form("")
-):
-    """Stil için NFT pasaport oluştur"""
-    if style_id not in mango_dpp.styles:
-        return JSONResponse({"error": "Stil bulunamadı"}, status_code=404)
-    
-    style = mango_dpp.styles[style_id]
-    collection = mango_dpp.collections.get(style["collection_id"], {})
-    
-    product_data = {
-        "code": f"MNG-{style_id[:8]}",
-        "name": style["name"],
-        "collection": collection.get("name", ""),
-        "materials": style["materials"],
-        "production_location": style["production_location"],
-        "carbon_footprint": style["carbon_footprint"],
-        "certificates": [c.strip() for c in certificates.split(",") if c.strip()],
-        "supplier": style["supplier"],
-        "additional_info": additional_info
-    }
-    
-    nft_data = mango_dpp.create_nft_passport(product_data)
-    
-    # Stili güncelle
-    mango_dpp.styles[style_id]["nft_id"] = nft_data["id"]
-    mango_dpp.styles[style_id]["status"] = "nft_oluşturuldu"
-    
-    return JSONResponse({
-        "success": True,
-        "nft_id": nft_data["id"],
-        "qr_code": nft_data["qr_code"],
-        "passport_url": nft_data["qr_url"]
-    })
-
-@app.get("/sustainability")
-async def sustainability_page(request: Request, db: Session = Depends(get_db)):
-    """Sürdürülebilirlik dashboard"""
-    lang = get_language(request)
-    styles = mango_dpp.get_styles(db)
-    
-    total_carbon = sum([style.carbon_footprint or 0 for style in styles])
-    avg_carbon = total_carbon / len(styles) if styles else 0
-    
-    # En düşük karbon ayak izli stiller
-    low_carbon_styles = sorted(styles, key=lambda x: x.carbon_footprint or 0)[:5]
-    
-    # Karbon kategorilerine göre dağılım
-    low_carbon_count = len([s for s in styles if (s.carbon_footprint or 0) < 3])
-    medium_carbon_count = len([s for s in styles if 3 <= (s.carbon_footprint or 0) <= 5])
-    high_carbon_count = len([s for s in styles if (s.carbon_footprint or 0) > 5])
-    
-    # Malzeme analizi
-    material_analysis = {}
-    for style in styles:
-        for material in style.materials or []:
-            if material not in material_analysis:
-                material_analysis[material] = {"count": 0, "total_carbon": 0}
-            material_analysis[material]["count"] += 1
-            material_analysis[material]["total_carbon"] += style.carbon_footprint or 0
-    
-    # Ortalama karbon hesapla
-    for material in material_analysis:
-        material_analysis[material]["avg_carbon"] = round(
-            material_analysis[material]["total_carbon"] / material_analysis[material]["count"], 2
-        )
-    
-    response = templates.TemplateResponse("sustainability.html", {
-        "request": request,
-        "total_carbon": round(total_carbon, 2),
-        "avg_carbon": round(avg_carbon, 2),
-        "low_carbon_styles": low_carbon_styles,
-        "total_styles": len(styles),
-        "low_carbon_count": low_carbon_count,
-        "medium_carbon_count": medium_carbon_count,
-        "high_carbon_count": high_carbon_count,
-        "material_analysis": material_analysis,
-        "lang": lang,
-        "t": get_all_texts(lang)
-    })
-    response.headers["Content-Type"] = "text/html; charset=utf-8"
-    return response
-
-@app.get("/sustainability/materials", response_class=HTMLResponse)
-async def materials_analysis(request: Request, db: Session = Depends(get_db)):
-    """Malzeme bazlı sürdürülebilirlik analizi"""
-    lang = request.cookies.get("lang", "tr")
-    material_stats = {}
-    
-    styles = mango_dpp.get_styles(db)
-    for style in styles:
-        materials = style.materials if style.materials else []
-        for material in materials:
-            if material not in material_stats:
-                material_stats[material] = {
-                    "styles": [],
-                    "total_carbon": 0,
-                    "avg_carbon": 0,
-                    "usage_count": 0,
-                    "sustainability_score": 0
-                }
-            
-            material_stats[material]["styles"].append(style)
-            material_stats[material]["total_carbon"] += style.carbon_footprint or 0
-            material_stats[material]["usage_count"] += 1
-    
-    # Sürdürülebilirlik skorları (basitleştirilmiş)
-    sustainability_scores = {
-        "organik_pamuk": 9, "keten": 8, "yün": 6, "pamuk": 5,
-        "ipek": 4, "polyester": 3, "naylon": 2, "akrilik": 1
-    }
-    
-    for material in material_stats:
-        if material_stats[material]["usage_count"] > 0:
-            material_stats[material]["avg_carbon"] = round(
-                material_stats[material]["total_carbon"] / material_stats[material]["usage_count"], 2
-            )
-        material_stats[material]["sustainability_score"] = sustainability_scores.get(
-            material.lower(), 5
-        )
-    
-    # En iyi ve en kötü malzemeler
-    best_materials = sorted(
-        material_stats.items(),
-        key=lambda x: (x[1]["sustainability_score"], -x[1]["avg_carbon"]),
-        reverse=True
-    )[:5]
-    
-    worst_materials = sorted(
-        material_stats.items(),
-        key=lambda x: (x[1]["sustainability_score"], -x[1]["avg_carbon"])
-    )[:5]
-    
-    response = templates.TemplateResponse("materials_analysis.html", {
-        "request": request,
-        "material_stats": material_stats,
-        "best_materials": best_materials,
-        "worst_materials": worst_materials,
-        "lang": lang,
-        "t": get_all_texts(lang)
-    })
-    response.headers["Content-Type"] = "text/html; charset=utf-8"
-    return response
-
-@app.get("/sustainability/production", response_class=HTMLResponse)
-async def production_analysis(request: Request, db: Session = Depends(get_db)):
-    """Üretim lokasyonu bazlı analiz"""
-    lang = request.cookies.get("lang", "tr")
-    location_stats = {}
-    
-    styles = mango_dpp.get_styles(db)
-    for style in styles:
-        location = style.production_location if style.production_location else "Bilinmiyor"
-        if location not in location_stats:
-            location_stats[location] = {
-                "styles": [],
-                "total_carbon": 0,
-                "avg_carbon": 0,
-                "count": 0
-            }
-        
-        location_stats[location]["styles"].append(style)
-        location_stats[location]["total_carbon"] += style.carbon_footprint or 0
-        location_stats[location]["count"] += 1
-    
-    for location in location_stats:
-        if location_stats[location]["count"] > 0:
-            location_stats[location]["avg_carbon"] = round(
-                location_stats[location]["total_carbon"] / location_stats[location]["count"], 2
-            )
-    
-    # En iyi ve en kötü lokasyonlar
-    best_locations = sorted(
-        location_stats.items(),
-        key=lambda x: x[1]["avg_carbon"]
-    )[:5]
-    
-    response = templates.TemplateResponse("production_analysis.html", {
-        "request": request,
-        "location_stats": location_stats,
-        "best_locations": best_locations,
-        "lang": lang,
-        "t": get_all_texts(lang)
-    })
-    response.headers["Content-Type"] = "text/html; charset=utf-8"
-    return response
-
-@app.get("/api/stats")
-async def get_stats(db: Session = Depends(get_db)):
-    """API: İstatistikler"""
-    collections = mango_dpp.get_collections(db)
-    styles = mango_dpp.get_styles(db)
-    nfts = mango_dpp.get_nfts(db)
-    
+@app.get("/health")
+def health():
     return {
-        "collections": len(collections),
-        "styles": len(styles),
-        "samples": 0,
-        "nfts": len(nfts),
-        "total_carbon": sum([s.carbon_footprint or 0 for s in styles])
+        "app": APP_NAME,
+        "version": VERSION,
+        "supabase_url_set": bool(SUPABASE_URL),
+        "service_key_set": bool(SUPABASE_SERVICE_ROLE),
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
     }
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+async def _get_json(client: httpx.AsyncClient, url: str, headers: dict, params: dict):
+    """Supabase GET -> (ok, data or error_dict)"""
+    r = await client.get(url, headers=headers, params=params)
+    if r.status_code == 200:
+        try:
+            return True, r.json()
+        except Exception as e:
+            return False, {"code": "BAD_JSON", "detail": str(e), "raw": r.text[:200]}
+    try:
+        err = r.json()
+    except Exception:
+        err = {"text": r.text[:200]}
+    return False, {"status": r.status_code, "error": err}
+
+
+async def fetch_product_and_weight(product_id: str):
+    """UUID veya code ile ürün + weight döner."""
+    is_uuid = bool(UUID_RE.match(product_id))
+    field = "id" if is_uuid else "code"
+    value = product_id
+
+    async with httpx.AsyncClient(timeout=30) as client:
+        # Products
+        ok, res = await _get_json(
+            client,
+            f"{SUPABASE_URL}/rest/v1/products",
+            _supabase_headers(SUPABASE_ANON_KEY),
+            {field: f"eq.{value}", "select": "*", "limit": 1},
+        )
+        if not ok:
+            return None, None, {"code": "UPSTREAM_ERROR_PRODUCTS", "detail": res}
+        if not res:
+            return None, None, {"code": "PRODUCT_NOT_FOUND", "detail": f"{field}={value}"}
+
+        prod = res[0]
+        prod_uuid = prod.get("id")
+        if not prod_uuid:
+            return None, None, {"code": "BAD_PRODUCT_ROW", "detail": "UUID id yok"}
+
+        # Weights
+        ok, res = await _get_json(
+            client,
+            f"{SUPABASE_URL}/rest/v1/product_weights",
+            _supabase_headers(SUPABASE_ANON_KEY),
+            {"product_id": f"eq.{prod_uuid}", "select": "weight_kg", "limit": 1},
+        )
+        if not ok:
+            return prod, None, {"code": "UPSTREAM_ERROR_WEIGHTS", "detail": res}
+        if not res or res[0].get("weight_kg") in (None, 0):
+            return prod, None, {"code": "MISSING_WEIGHT", "detail": f"product_id={prod_uuid}"}
+
+        return prod, res[0], None
+
+
+def render_pdf_bytes(product: dict, weight: dict) -> bytes:
+    """Basit markalı PDF üretimi."""
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib import colors
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.units import mm
+
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=A4)
+    c.setTitle(f"Product Report — {product.get('code') or product.get('id')}")
+
+    # Header
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(72, 820, "Zero@Design — Product Report")
+    c.setStrokeColor(colors.grey)
+    c.setLineWidth(0.5)
+    c.line(72, 810, 72 + 120 * mm, 810)
+
+    # Body
+    c.setFont("Helvetica", 12)
+    y = 780
+    c.drawString(72, y, f"Product Code : {product.get('code','-')}"); y -= 20
+    c.drawString(72, y, f"Name         : {product.get('name','-')}"); y -= 20
+    c.drawString(72, y, f"Weight (kg)  : {weight.get('weight_kg','-')}"); y -= 40
+    c.drawString(72, y, f"Generated At : {time.strftime('%Y-%m-%d %H:%M:%S')}")
+    c.showPage()
+    c.save()
+    buf.seek(0)
+    return buf.read()
+
+
+async def upload_pdf_and_sign(path: str, data: bytes) -> str:
+    if not SUPABASE_SERVICE_ROLE:
+        return ""
+    async with httpx.AsyncClient(timeout=60) as client:
+        up = await client.post(
+            f"{SUPABASE_URL}/storage/v1/object/{PDF_BUCKET}/{path}",
+            headers=_supabase_headers(SUPABASE_SERVICE_ROLE),
+            content=data,
+        )
+        if up.status_code not in (200, 201):
+            raise RuntimeError(f"UPLOAD_FAIL {up.status_code}: {up.text[:120]}")
+        sign = await client.post(
+            f"{SUPABASE_URL}/storage/v1/object/sign/{PDF_BUCKET}/{path}",
+            headers=_supabase_headers(SUPABASE_SERVICE_ROLE),
+            json={"expiresIn": PDF_SIGNED_URL_EXPIRES},
+        )
+        if sign.status_code != 200:
+            raise RuntimeError(f"SIGN_FAIL {sign.status_code}: {sign.text[:120]}")
+        return sign.json().get("signedURL", "")
+
+
+@app.post("/ai/product-report")
+async def product_report(inp: ReportIn):
+    try:
+        product, weight, err = await fetch_product_and_weight(inp.product_id)
+        if err:
+            code = err.get("code")
+            detail = err.get("detail")
+            status = 400
+            if code == "PRODUCT_NOT_FOUND":
+                status = 404
+            elif code == "MISSING_WEIGHT":
+                status = 422
+            elif code.startswith("UPSTREAM_ERROR"):
+                status = 502
+            return JSONResponse(status_code=status, content={"ok": False, "code": code, "detail": detail})
+
+        pdf = render_pdf_bytes(product, weight)
+        ts = int(time.time())
+        key = f"{product.get('code') or inp.product_id}/{ts}.pdf"
+
+        if SUPABASE_SERVICE_ROLE:
+            try:
+                url = await upload_pdf_and_sign(key, pdf)
+                if url:
+                    return {"ok": True, "product_code": product.get("code"), "pdf_url": url}
+            except Exception as e:
+                msg = str(e)
+                if DEBUG:
+                    return JSONResponse(status_code=502, content={"ok": False, "code": "STORAGE_ERROR", "detail": msg})
+                return JSONResponse(status_code=502, content={"ok": False, "code": "STORAGE_ERROR"})
+
+        return {"ok": True, "product_code": product.get("code"), "pdf_len": len(pdf)}
+
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"ok": False, "code": "INTERNAL_ERROR", "detail": str(e) if DEBUG else "internal error"},
+        )
+
+
+# DPP API Endpoints
+@app.get("/api/dpp-list")
+async def get_dpp_list():
+    """DPP listesini döndürür"""
+    try:
+        return {
+            "success": True,
+            "dpps": dpp_storage,
+            "count": len(dpp_storage)
+        }
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={
+                "success": False,
+                "error": str(e) if DEBUG else "DPP listesi yüklenirken hata oluştu"
+            }
+        )
+
+
+@app.get("/api/dpp/{dpp_id}")
+async def get_dpp_details(dpp_id: str):
+    """Belirli bir DPP'nin detaylarını döndürür"""
+    try:
+        # Global dpp_storage listesinden DPP'yi bul
+        dpp_basic = None
+        for dpp in dpp_storage:
+            if dpp["dpp_id"] == dpp_id:
+                dpp_basic = dpp
+                break
+        
+        if not dpp_basic:
+            return JSONResponse(
+                status_code=404,
+                content={
+                    "success": False,
+                    "error": "DPP bulunamadı"
+                }
+            )
+        
+        # Frontend'in beklediği veri yapısına uygun detaylı DPP verisi oluştur
+        detailed_dpp = {
+            "dpp_id": dpp_basic["dpp_id"],
+            "product_info": {
+                "name": dpp_basic["product_name"],
+                "category": dpp_basic["category"],
+                "brand": "Zero@Design",
+                "season": "2024 İlkbahar",
+                "collection": "Sürdürülebilir Koleksiyon"
+            },
+            "sustainability": {
+                "co2_footprint": {
+                    "total_kg": dpp_basic["co2_footprint"],
+                    "calculation_method": "LCA (Yaşam Döngüsü Analizi)"
+                },
+                "sustainability_score": dpp_basic["sustainability_score"]
+            },
+            "materials": {
+                "total_weight": "250",
+                "fiber_composition": [
+                    {"fiber": "Organik Pamuk", "percentage": 95},
+                    {"fiber": "Elastan", "percentage": 5}
+                ]
+            },
+            "production": {
+                "manufacturing_location": "Türkiye",
+                "production_date": dpp_basic["created_at"][:10],
+                "batch_number": f"BATCH-{dpp_basic['dpp_id'][-6:]}",
+                "processes": ["Eğirme", "Dokuma", "Boyama", "Konfeksiyon"]
+            },
+            "created_at": dpp_basic["created_at"]
+        }
+        
+        return {
+            "success": True,
+            "dpp": detailed_dpp
+        }
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={
+                 "success": False,
+                 "error": str(e) if DEBUG else "DPP detayları yüklenirken hata oluştu"
+             }
+         )
+
+
+@app.post("/api/create-dpp")
+async def create_dpp(dpp_data: dict):
+    """Yeni DPP oluşturur"""
+    try:
+        import uuid
+        from datetime import datetime
+        
+        new_dpp_id = f"dpp-{str(uuid.uuid4())[:8]}"
+        
+        # Yeni DPP'yi storage'a ekle
+        new_dpp = {
+            "dpp_id": new_dpp_id,
+            "product_name": dpp_data.get("product_name", "Bilinmeyen Ürün"),
+            "category": dpp_data.get("product_type", "Genel"),
+            "co2_footprint": dpp_data.get("total_co2", 0),
+            "sustainability_score": dpp_data.get("sustainability_score", 0),
+            "created_at": datetime.now().isoformat() + "Z"
+        }
+        
+        dpp_storage.append(new_dpp)
+        
+        return {
+            "success": True,
+            "dpp_id": new_dpp_id,
+            "message": "DPP başarıyla oluşturuldu"
+        }
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={
+                "success": False,
+                "error": str(e) if DEBUG else "DPP oluşturulurken hata oluştu"
+            }
+        )
+
+@app.get("/api/nft-metadata/{dpp_id}")
+async def get_nft_metadata(dpp_id: str):
+    """DPP için NFT metadata döndürür"""
+    try:
+        # Örnek NFT metadata - gerçek uygulamada DPP verilerinden oluşturulacak
+        nft_metadata = {
+            "name": f"Zero@Design DPP #{dpp_id}",
+            "description": "Sürdürülebilir moda için dijital ürün pasaportu NFT'si",
+            "image": f"https://api.zero-at-design.com/nft-images/{dpp_id}.png",
+            "external_url": f"https://zero-at-design.com/dpp/{dpp_id}",
+            "attributes": [
+                {
+                    "trait_type": "Sürdürülebilirlik Skoru",
+                    "value": 85
+                },
+                {
+                    "trait_type": "CO₂ Ayak İzi",
+                    "value": "8.5 kg"
+                },
+                {
+                    "trait_type": "Kategori",
+                    "value": "Tekstil"
+                },
+                {
+                    "trait_type": "Sertifikalar",
+                    "value": "GOTS, OEKO-TEX"
+                },
+                {
+                    "trait_type": "Üretim Yeri",
+                    "value": "Türkiye"
+                }
+            ],
+            "properties": {
+                "dpp_id": dpp_id,
+                "blockchain": "Ethereum",
+                "standard": "ERC-721",
+                "created_at": "2024-01-15T10:30:00Z"
+            }
+        }
+        
+        return nft_metadata
+        
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": str(e) if DEBUG else "NFT metadata yüklenirken hata oluştu"
+            }
+        )

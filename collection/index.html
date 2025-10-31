@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSP Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+
+    
+    
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <!-- Navigation brand href fix -->
+            <a class="navbar-brand" href="/dashboard">
+                <div class="brand-icon">
+                    <img src="/static/images/logo.png" alt="Zero@Design Logo" class="logo-img">
+                </div>
+                <div class="brand-text">
+                    <div class="brand-title">Zero@Design</div>
+                    <div class="brand-subtitle">Health Sustainability Passport</div>
+                </div>
+            </a>
+
+            <!-- Navbar Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                </ul>
+
+                <!-- Action Buttons -->
+                <div class="navbar-actions">
+                    <!-- Language Selector -->
+                    <div class="lang">
+                        <span class="pill">TR</span>
+                        <span class="pill active" style="background: var(--brand); color: white;">EN</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+<div class="wrap">
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="row">
+            <div class="seg">
+                <button onclick="window.location.href='/'">Dashboard</button>
+                <button onclick="window.location.href='/design'">Design</button>
+                <button onclick="window.location.href='/analyze'">Analyze</button>
+                <button onclick="window.location.href='/optimize'">Optimize</button>
+                <button onclick="window.location.href='/report'">Report</button>
+                <button onclick="window.location.href='/export'">Export</button>
+                <button onclick="window.location.href='/settings/'">Settings</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Additional Navigation Row -->
+    <div class="hero">
+        <div class="row secondary">
+            <div class="seg">
+                <button onclick="window.location.href='/analytics'">Analytics</button>
+                <button onclick="window.location.href='/benchmark'">Benchmark</button>
+                <button onclick="window.location.href='/style_card'">Style Card</button>
+                <button class="active">Collection</button>
+                <button onclick="window.location.href='/dpp'">DPP/NFT</button>
+                <button onclick="window.location.href='/blockchain_status'">Blockchain</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-layer-group me-2"></i>Koleksiyon Dashboard
+                </h4>
+                <p class="text-muted small mb-0 mt-2">Koleksiyon bazlı toplam CO₂ hesaplama ve analiz</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-tshirt fa-2x text-primary mb-2"></i>
+                <h5 class="card-title" id="totalProducts">0</h5>
+                <p class="card-text text-muted">Toplam Ürün</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-leaf fa-2x text-success mb-2"></i>
+                <h5 class="card-title" id="avgCO2">0.0</h5>
+                <p class="card-text text-muted">Ortalama CO₂ (kg)</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-calculator fa-2x text-warning mb-2"></i>
+                <h5 class="card-title" id="totalCO2">0.0</h5>
+                <p class="card-text text-muted">Toplam CO₂ (kg)</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-award fa-2x text-info mb-2"></i>
+                <h5 class="card-title" id="avgScore">0</h5>
+                <p class="card-text text-muted">Ortalama Skor</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>Ürün Bazlı CO₂ Analizi
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="productCO2Chart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-pie-chart me-2"></i>CO₂ Dağılımı
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="co2DistributionChart" width="300" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-list me-2"></i>Stil Kartları
+                </h5>
+                <a href="/style-card" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus me-1"></i>Yeni Stil Kartı
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="styleCardsTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Ürün Adı</th>
+                                <th>Kategori</th>
+                                <th>Ana Lif</th>
+                                <th>CO₂ (kg)</th>
+                                <th>Skor</th>
+                                <th>Tarih</th>
+                                <th>Aksiyon</th>
+                            </tr>
+                        </thead>
+                        <tbody id="styleCardsTableBody">
+                            <!-- Veriler JavaScript ile yüklenecek -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="noDataMessage" class="text-center py-5" style="display: none;">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">Henüz stil kartı bulunmuyor</h5>
+                    <p class="text-muted">İlk stil kartınızı oluşturmak için yukarıdaki butona tıklayın.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-line me-2"></i>Trend Analizi
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="trendChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-robot me-2"></i>Koleksiyon Optimizasyonu
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Hedef CO₂ Azaltma (%)</label>
+                    <input type="range" class="form-range" id="reductionTarget" min="5" max="50" value="15">
+                    <div class="d-flex justify-content-between">
+                        <small>%5</small>
+                        <small id="reductionValue">%15</small>
+                        <small>%50</small>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary w-100 mb-3" onclick="optimizeCollection()">
+                    <i class="fas fa-magic me-1"></i>Koleksiyonu Optimize Et
+                </button>
+                
+                <div id="optimizationResults" style="display: none;">
+                    <h6>Optimizasyon Önerileri:</h6>
+                    <div id="optimizationList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stil Kartı Detay Modal -->
+<div class="modal fade" id="styleCardDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Stil Kartı Detayları</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Detaylar JavaScript ile yüklenecek -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="editStyleCard()">
+                    <i class="fas fa-edit me-1"></i>Düzenle
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-leaf"></i>
+                    <span>Zero@Design</span>
+                </div>
+                <div class="footer-text">
+                    Sürdürülebilir tasarım ve karbon ayak izi ölçümü için gelişmiş analitik platform
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Gizlilik</a>
+                    <a href="#" class="footer-link">Şartlar</a>
+                    <a href="#" class="footer-link">Destek</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    
+</body>
+</html>

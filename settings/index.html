@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero@Design — Settings</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+
+    
+    
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <a class="navbar-brand" href="/dashboard" onclick="window.location.href='/'">
+                <div class="brand-icon">
+                    <img src="/static/images/logo.png" alt="Zero@Design Logo" class="logo-img">
+                </div>
+                <div class="brand-text">
+                    <div class="brand-title">Zero@Design Dashboard — Eco-Design @ Source</div>
+                    <div class="brand-subtitle">Sürdürülebilir tasarım ve karbon ayak izi ölçümü için gelişmiş analitik platform</div>
+                </div>
+            </a>
+
+            <!-- Navbar Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                </ul>
+
+                <!-- Language Selector -->
+                <div class="navbar-actions">
+                    <div class="lang">
+                        <button class="btn btn-ghost">TR</button>
+                        <button class="btn btn-ghost active" style="background: var(--brand); color: white;">EN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+<main class="main-content">
+    <!-- Navigation Menu -->
+    <div class="nav-menu">
+        <div class="nav-container">
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="window.location.href='/'">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-btn" onclick="window.location.href='/analytics'">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </button>
+                <button class="nav-btn" onclick="window.location.href='/design'">
+                    <i class="fas fa-palette"></i>
+                    <span>Design</span>
+                </button>
+                <button class="nav-btn" onclick="window.location.href='/analyze'">
+                    <i class="fas fa-search"></i>
+                    <span>Analyze</span>
+                </button>
+                <button class="nav-btn" onclick="window.location.href='/optimize'">
+                    <i class="fas fa-cogs"></i>
+                    <span>Optimize</span>
+                </button>
+                <button class="nav-btn" onclick="window.location.href='/report'">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Report</span>
+                </button>
+                <button class="nav-btn" onclick="window.location.href='/export'">
+                    <i class="fas fa-download"></i>
+                    <span>Export</span>
+                </button>
+                <button class="nav-btn" onclick="window.location.href='/dpp'">
+                    <i class="fas fa-passport"></i>
+                    <span>DPP</span>
+                </button>
+                <button class="nav-btn" onclick="window.location.href='/blockchain'">
+                    <i class="fas fa-link"></i>
+                    <span>Blockchain</span>
+                </button>
+                <button class="nav-btn active" onclick="window.location.href='/settings/'">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </button>
+            </div>
+        </div>
+    </div>
+<div class="wrap">
+
+    <!-- Settings KPIs -->
+    <div class="kpis">
+        <div class="kpi">
+            <div class="kpi-label">Aktif Kullanıcılar</div>
+            <div class="kpi-value">12</div>
+        </div>
+        <div class="kpi">
+            <div class="kpi-label">Sistem Durumu</div>
+            <div class="kpi-value">Çevrimiçi</div>
+        </div>
+        <div class="kpi">
+            <div class="kpi-label">Son Yedekleme</div>
+            <div class="kpi-value">2 saat önce</div>
+        </div>
+        <div class="kpi">
+            <div class="kpi-label">Depolama Kullanımı</div>
+            <div class="kpi-value">68%</div>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="grid">
+        <!-- General Settings -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Genel Ayarlar</h3>
+                <div class="settings-actions">
+                    <button class="btn btn-ghost">Sıfırla</button>
+                    <button class="btn btn-primary">Kaydet</button>
+                </div>
+            </div>
+            <div class="settings-content">
+                <div class="settings-tabs">
+                    <button class="tab-btn active" data-tab="general">Genel</button>
+                    <button class="tab-btn" data-tab="appearance">Görünüm</button>
+                    <button class="tab-btn" data-tab="notifications">Bildirimler</button>
+                    <button class="tab-btn" data-tab="security">Güvenlik</button>
+                </div>
+
+                <div class="tab-content active" id="general-tab">
+                    <div class="settings-section">
+                        <h4>Dil ve Bölge</h4>
+                        <div class="setting-item">
+                            <label class="setting-label">Dil</label>
+                            <select class="form-select">
+                                <option value="tr" selected>Türkçe</option>
+                                <option value="en">English</option>
+                                <option value="de">Deutsch</option>
+                                <option value="fr">Français</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Zaman Dilimi</label>
+                            <select class="form-select">
+                                <option value="Europe/Istanbul" selected>İstanbul (UTC+3)</option>
+                                <option value="UTC">UTC</option>
+                                <option value="Europe/London">Londra (UTC+0)</option>
+                                <option value="America/New_York">New York (UTC-5)</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Para Birimi</label>
+                            <select class="form-select">
+                                <option value="TRY" selected>Türk Lirası (₺)</option>
+                                <option value="USD">US Dollar ($)</option>
+                                <option value="EUR">Euro (€)</option>
+                                <option value="GBP">British Pound (£)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h4>Veri Ayarları</h4>
+                        <div class="setting-item">
+                            <label class="setting-label">Otomatik Kaydetme</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="auto-save" checked>
+                                <label for="auto-save" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Veri Senkronizasyonu</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="data-sync" checked>
+                                <label for="data-sync" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Çevrimdışı Mod</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="offline-mode">
+                                <label for="offline-mode" class="toggle-label"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="appearance-tab">
+                    <div class="settings-section">
+                        <h4>Tema Ayarları</h4>
+                        <div class="setting-item">
+                            <label class="setting-label">Tema</label>
+                            <div class="theme-selector">
+                                <div class="theme-option active" data-theme="dark">
+                                    <div class="theme-preview dark-theme"></div>
+                                    <span>Koyu Tema</span>
+                                </div>
+                                <div class="theme-option" data-theme="light">
+                                    <div class="theme-preview light-theme"></div>
+                                    <span>Açık Tema</span>
+                                </div>
+                                <div class="theme-option" data-theme="auto">
+                                    <div class="theme-preview auto-theme"></div>
+                                    <span>Otomatik</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Vurgu Rengi</label>
+                            <div class="color-picker">
+                                <div class="color-option active" style="background: #3b82f6;" data-color="#3b82f6"></div>
+                                <div class="color-option" style="background: #10b981;" data-color="#10b981"></div>
+                                <div class="color-option" style="background: #f59e0b;" data-color="#f59e0b"></div>
+                                <div class="color-option" style="background: #ef4444;" data-color="#ef4444"></div>
+                                <div class="color-option" style="background: #8b5cf6;" data-color="#8b5cf6"></div>
+                                <div class="color-option" style="background: #06b6d4;" data-color="#06b6d4"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h4>Görünüm Seçenekleri</h4>
+                        <div class="setting-item">
+                            <label class="setting-label">Kompakt Mod</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="compact-mode">
+                                <label for="compact-mode" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Animasyonlar</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="animations" checked>
+                                <label for="animations" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Sidebar Otomatik Gizle</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="auto-hide-sidebar">
+                                <label for="auto-hide-sidebar" class="toggle-label"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="notifications-tab">
+                    <div class="settings-section">
+                        <h4>Bildirim Türleri</h4>
+                        <div class="setting-item">
+                            <label class="setting-label">Sistem Bildirimleri</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="system-notifications" checked>
+                                <label for="system-notifications" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">E-posta Bildirimleri</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="email-notifications" checked>
+                                <label for="email-notifications" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Analiz Raporları</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="analysis-reports" checked>
+                                <label for="analysis-reports" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Optimizasyon Önerileri</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="optimization-suggestions" checked>
+                                <label for="optimization-suggestions" class="toggle-label"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h4>Bildirim Zamanlaması</h4>
+                        <div class="setting-item">
+                            <label class="setting-label">Günlük Özet</label>
+                            <select class="form-select">
+                                <option value="09:00">09:00</option>
+                                <option value="12:00">12:00</option>
+                                <option value="18:00" selected>18:00</option>
+                                <option value="disabled">Devre Dışı</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Haftalık Rapor</label>
+                            <select class="form-select">
+                                <option value="monday" selected>Pazartesi</option>
+                                <option value="friday">Cuma</option>
+                                <option value="disabled">Devre Dışı</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="security-tab">
+                    <div class="settings-section">
+                        <h4>Hesap Güvenliği</h4>
+                        <div class="setting-item">
+                            <label class="setting-label">İki Faktörlü Kimlik Doğrulama</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="two-factor">
+                                <label for="two-factor" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Oturum Zaman Aşımı</label>
+                            <select class="form-select">
+                                <option value="30">30 dakika</option>
+                                <option value="60" selected>1 saat</option>
+                                <option value="240">4 saat</option>
+                                <option value="480">8 saat</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Şifre Değiştir</label>
+                            <button class="btn btn-ghost">Şifre Değiştir</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h4>Veri Güvenliği</h4>
+                        <div class="setting-item">
+                            <label class="setting-label">Veri Şifreleme</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="data-encryption" checked>
+                                <label for="data-encryption" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Otomatik Yedekleme</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="auto-backup" checked>
+                                <label for="auto-backup" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Audit Log</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="audit-log" checked>
+                                <label for="audit-log" class="toggle-label"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Information -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Sistem Bilgileri</h3>
+            </div>
+            <div class="system-info">
+                <div class="info-section">
+                    <h4>Uygulama</h4>
+                    <div class="info-item">
+                        <span class="info-label">Versiyon</span>
+                        <span class="info-value">v2.1.0</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Son Güncelleme</span>
+                        <span class="info-value">15 Mart 2024</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Lisans</span>
+                        <span class="info-value">Enterprise</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h4>Sistem Durumu</h4>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <div class="status-indicator online"></div>
+                            <span>API Servisi</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-indicator online"></div>
+                            <span>Veritabanı</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-indicator online"></div>
+                            <span>AI Motoru</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-indicator warning"></div>
+                            <span>Yedekleme</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h4>Kaynak Kullanımı</h4>
+                    <div class="resource-item">
+                        <span class="resource-label">CPU</span>
+                        <div class="resource-bar">
+                            <div class="resource-fill" style="width: 45%"></div>
+                        </div>
+                        <span class="resource-value">45%</span>
+                    </div>
+                    <div class="resource-item">
+                        <span class="resource-label">RAM</span>
+                        <div class="resource-bar">
+                            <div class="resource-fill" style="width: 68%"></div>
+                        </div>
+                        <span class="resource-value">68%</span>
+                    </div>
+                    <div class="resource-item">
+                        <span class="resource-label">Disk</span>
+                        <div class="resource-bar">
+                            <div class="resource-fill" style="width: 32%"></div>
+                        </div>
+                        <span class="resource-value">32%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secondary Grid -->
+    <div class="grid">
+        <!-- User Management -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Kullanıcı Yönetimi</h3>
+                <button class="btn btn-primary">Kullanıcı Ekle</button>
+            </div>
+            <div class="user-management">
+                <div class="user-item">
+                    <div class="user-avatar">
+                        <div class="avatar-circle">CM</div>
+                    </div>
+                    <div class="user-details">
+                        <h5>Cem Onat</h5>
+                        <p>Admin • Son giriş: 2 saat önce</p>
+                    </div>
+                    <div class="user-actions">
+                        <button class="btn btn-ghost btn-sm">Düzenle</button>
+                    </div>
+                </div>
+                <div class="user-item">
+                    <div class="user-avatar">
+                        <div class="avatar-circle">AY</div>
+                    </div>
+                    <div class="user-details">
+                        <h5>Ahmet Yılmaz</h5>
+                        <p>Editör • Son giriş: 1 gün önce</p>
+                    </div>
+                    <div class="user-actions">
+                        <button class="btn btn-ghost btn-sm">Düzenle</button>
+                    </div>
+                </div>
+                <div class="user-item">
+                    <div class="user-avatar">
+                        <div class="avatar-circle">FK</div>
+                    </div>
+                    <div class="user-details">
+                        <h5>Fatma Kaya</h5>
+                        <p>Görüntüleyici • Son giriş: 3 gün önce</p>
+                    </div>
+                    <div class="user-actions">
+                        <button class="btn btn-ghost btn-sm">Düzenle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Aktivite Günlüğü</h3>
+                <div class="log-filters">
+                    <button class="pill active">Tümü</button>
+                    <button class="pill">Bugün</button>
+                    <button class="pill">Bu Hafta</button>
+                </div>
+            </div>
+            <div class="activity-log">
+                <div class="log-item">
+                    <div class="log-time">14:30</div>
+                    <div class="log-details">
+                        <div class="log-action">Sistem ayarları güncellendi</div>
+                        <div class="log-user">Cem Onat tarafından</div>
+                    </div>
+                    <div class="log-status success">Başarılı</div>
+                </div>
+                <div class="log-item">
+                    <div class="log-time">13:15</div>
+                    <div class="log-details">
+                        <div class="log-action">Yeni kullanıcı eklendi</div>
+                        <div class="log-user">Ahmet Yılmaz tarafından</div>
+                    </div>
+                    <div class="log-status success">Başarılı</div>
+                </div>
+                <div class="log-item">
+                    <div class="log-time">12:45</div>
+                    <div class="log-details">
+                        <div class="log-action">Veri yedeklemesi başlatıldı</div>
+                        <div class="log-user">Sistem tarafından</div>
+                    </div>
+                    <div class="log-status warning">Devam ediyor</div>
+                </div>
+                <div class="log-item">
+                    <div class="log-time">11:20</div>
+                    <div class="log-details">
+                        <div class="log-action">Rapor dışa aktarıldı</div>
+                        <div class="log-user">Fatma Kaya tarafından</div>
+                    </div>
+                    <div class="log-status success">Başarılı</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Tab functionality
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const tabId = btn.dataset.tab;
+        
+        // Update active tab button
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Update active tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        document.getElementById(tabId + '-tab').classList.add('active');
+    });
+});
+
+// Theme selector
+document.querySelectorAll('.theme-option').forEach(option => {
+    option.addEventListener('click', () => {
+        document.querySelectorAll('.theme-option').forEach(o => o.classList.remove('active'));
+        option.classList.add('active');
+    });
+});
+
+// Color picker
+document.querySelectorAll('.color-option').forEach(option => {
+    option.addEventListener('click', () => {
+        document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
+        option.classList.add('active');
+    });
+});
+</script>
+
+<style>
+.settings-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.settings-content {
+    padding: 16px;
+}
+
+.settings-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 4px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 8px 16px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+    background: var(--accent);
+    color: white;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.settings-section {
+    margin-bottom: 32px;
+}
+
+.settings-section h4 {
+    margin: 0 0 16px 0;
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+}
+
+.setting-label {
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-select {
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: var(--ink);
+    font-size: 14px;
+    min-width: 120px;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.toggle-label:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-label {
+    background-color: var(--accent);
+}
+
+input:checked + .toggle-label:before {
+    transform: translateX(20px);
+}
+
+.theme-selector {
+    display: flex;
+    gap: 16px;
+}
+
+.theme-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.theme-option:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.theme-option.active {
+    border-color: var(--accent);
+}
+
+.theme-preview {
+    width: 40px;
+    height: 24px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark-theme {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+.light-theme {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.auto-theme {
+    background: linear-gradient(135deg, #1e293b 0%, #1e293b 50%, #f8fafc 50%, #f8fafc 100%);
+}
+
+.theme-option span {
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.color-picker {
+    display: flex;
+    gap: 8px;
+}
+
+.color-option {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.color-option:hover {
+    transform: scale(1.1);
+}
+
+.color-option.active {
+    border-color: white;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.system-info {
+    padding: 16px;
+}
+
+.info-section {
+    margin-bottom: 24px;
+}
+
+.info-section h4 {
+    margin: 0 0 12px 0;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.info-value {
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-indicator.online {
+    background: #10b981;
+}
+
+.status-indicator.warning {
+    background: #f59e0b;
+}
+
+.status-indicator.offline {
+    background: #ef4444;
+}
+
+.status-item span {
+    color: var(--ink);
+    font-size: 12px;
+}
+
+.resource-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.resource-label {
+    color: var(--muted);
+    font-size: 12px;
+    min-width: 40px;
+}
+
+.resource-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.resource-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.3s ease;
+}
+
+.resource-value {
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 35px;
+    text-align: right;
+}
+
+.user-management {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.user-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.user-avatar {
+    flex-shrink: 0;
+}
+
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.user-details {
+    flex: 1;
+}
+
+.user-details h5 {
+    margin: 0 0 2px 0;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.user-details p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.user-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.log-filters {
+    display: flex;
+    gap: 8px;
+}
+
+.activity-log {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.log-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+}
+
+.log-time {
+    color: var(--muted);
+    font-size: 12px;
+    min-width: 50px;
+}
+
+.log-details {
+    flex: 1;
+}
+
+.log-action {
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.log-user {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.log-status {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.log-status.success {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.log-status.warning {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+.log-status.error {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 12px;
+}
+</style>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-leaf"></i>
+                    <span>Zero@Design</span>
+                </div>
+                <div class="footer-text">
+                    Sürdürülebilir tasarım ve karbon ayak izi ölçümü için gelişmiş analitik platform
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Gizlilik</a>
+                    <a href="#" class="footer-link">Şartlar</a>
+                    <a href="#" class="footer-link">Destek</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    
+</body>
+</html>

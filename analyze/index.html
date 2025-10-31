@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSP Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+
+    
+    
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <!-- Navigation brand href fix -->
+            <a class="navbar-brand" href="/dashboard">
+                <div class="brand-icon">
+                    <img src="/static/images/logo.png" alt="Zero@Design Logo" class="logo-img">
+                </div>
+                <div class="brand-text">
+                    <div class="brand-title">Zero@Design Dashboard — Eco-Design @ Source</div>
+                    <div class="brand-subtitle">Sürdürülebilir tasarım ve karbon ayak izi ölçümü için gelişmiş analitik platform</div>
+                </div>
+            </a>
+
+            <!-- Navbar Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                </ul>
+
+                <!-- Language Selector -->
+                <div class="navbar-actions">
+                    <div class="lang">
+                        <span class="pill">TR</span>
+                        <span class="pill active" style="background: var(--brand); color: white;">EN</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+<div class="wrap">
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="row">
+            <div class="seg">
+                <button onclick="window.location.href='/'">Dashboard</button>
+                <button onclick="window.location.href='/analytics'">Analytics</button>
+                <button onclick="window.location.href='/design'">Design</button>
+                <button class="active">Analyze</button>
+                <button onclick="window.location.href='/optimize'">Optimize</button>
+                <button onclick="window.location.href='/report'">Report</button>
+                <button onclick="window.location.href='/export'">Export</button>
+                <button onclick="window.location.href='/settings/'">Settings</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Additional Navigation Row -->
+    <div class="hero">
+        <div class="row secondary">
+            <div class="seg">
+                <button onclick="window.location.href='/benchmark'">Benchmark</button>
+                <button onclick="window.location.href='/style_card'">Style Card</button>
+                <button onclick="window.location.href='/collection'">Collection</button>
+                <button onclick="window.location.href='/dpp'">DPP/NFT</button>
+                <button onclick="window.location.href='/blockchain_status'">Blockchain</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis KPIs -->
+    <div class="kpis">
+        <div class="kpi">
+            <div class="kpi-label">Analiz Edilen Ürünler</div>
+            <div class="kpi-value">89</div>
+        </div>
+        <div class="kpi">
+            <div class="kpi-label">Ortalama LCA Skoru</div>
+            <div class="kpi-value">7.8</div>
+        </div>
+        <div class="kpi">
+            <div class="kpi-label">İyileştirme Potansiyeli (%)</div>
+            <div class="kpi-value">34</div>
+        </div>
+        <div class="kpi">
+            <div class="kpi-label">Toplam CO₂e Analizi (t)</div>
+            <div class="kpi-value">156.7</div>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="grid">
+        <!-- Product Analysis -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Ürün Analizi</h3>
+                <div class="analysis-controls">
+                    <button class="btn btn-ghost">Yeni Analiz</button>
+                    <button class="btn btn-ghost">Karşılaştır</button>
+                    <button class="btn btn-ghost">Rapor Al</button>
+                </div>
+            </div>
+            <div class="analysis-container">
+                <div class="product-selector">
+                    <h4>Analiz Edilecek Ürün</h4>
+                    <select class="form-select">
+                        <option>Organik Pamuk T-Shirt</option>
+                        <option>Geri Dönüştürülmüş Polyester Ceket</option>
+                        <option>Bambu Lifi Elbise</option>
+                        <option>Kenevir Pantolon</option>
+                    </select>
+                </div>
+                <div class="analysis-metrics">
+                    <div class="metric-card">
+                        <h5>Yaşam Döngüsü Analizi</h5>
+                        <div class="metric-value">8.2/10</div>
+                        <div class="metric-trend positive">+0.3</div>
+                    </div>
+                    <div class="metric-card">
+                        <h5>Karbon Ayak İzi</h5>
+                        <div class="metric-value">2.1 kg CO₂e</div>
+                        <div class="metric-trend negative">-0.4</div>
+                    </div>
+                    <div class="metric-card">
+                        <h5>Su Ayak İzi</h5>
+                        <div class="metric-value">1,240 L</div>
+                        <div class="metric-trend positive">-180</div>
+                    </div>
+                    <div class="metric-card">
+                        <h5>Geri Dönüşüm Oranı</h5>
+                        <div class="metric-value">85%</div>
+                        <div class="metric-trend positive">+5%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Impact Analysis Chart -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Etki Analizi — Kategori Bazında</h3>
+                <div class="chart-controls">
+                    <button class="pill active">CO₂e</button>
+                    <button class="pill">Su</button>
+                    <button class="pill">Enerji</button>
+                    <button class="pill">Atık</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="impactChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secondary Grid -->
+    <div class="grid">
+        <!-- Comparison Table -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Ürün Karşılaştırması</h3>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Ürün</th>
+                            <th>LCA Skoru</th>
+                            <th>CO₂e (kg)</th>
+                            <th>Su (L)</th>
+                            <th>Geri Dönüşüm (%)</th>
+                            <th>Durum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Organik Pamuk T-Shirt</td>
+                            <td>8.2</td>
+                            <td>2.1</td>
+                            <td>1,240</td>
+                            <td>85%</td>
+                            <td><span class="pill success">Mükemmel</span></td>
+                        </tr>
+                        <tr>
+                            <td>Geri Dönüştürülmüş Ceket</td>
+                            <td>7.8</td>
+                            <td>3.2</td>
+                            <td>890</td>
+                            <td>92%</td>
+                            <td><span class="pill success">İyi</span></td>
+                        </tr>
+                        <tr>
+                            <td>Bambu Lifi Elbise</td>
+                            <td>8.9</td>
+                            <td>1.6</td>
+                            <td>780</td>
+                            <td>78%</td>
+                            <td><span class="pill success">Mükemmel</span></td>
+                        </tr>
+                        <tr>
+                            <td>Kenevir Pantolon</td>
+                            <td>9.1</td>
+                            <td>1.2</td>
+                            <td>650</td>
+                            <td>88%</td>
+                            <td><span class="pill success">Üstün</span></td>
+                        </tr>
+                        <tr>
+                            <td>Konvansiyonel Pamuk</td>
+                            <td>4.2</td>
+                            <td>5.8</td>
+                            <td>2,700</td>
+                            <td>15%</td>
+                            <td><span class="pill danger">Zayıf</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- AI Insights -->
+        <div class="card">
+            <div class="card-header">
+                <h3>AI Analiz Öngörüleri</h3>
+            </div>
+            <div class="insights-container">
+                <div class="insight-item">
+                    <div class="insight-icon">🔍</div>
+                    <div class="insight-content">
+                        <h4>Kritik Bulgular</h4>
+                        <p>Organik pamuk kullanımı su tüketimini %54 azaltıyor ancak üretim maliyeti %23 artıyor.</p>
+                        <span class="pill warning">Dikkat</span>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-icon">📊</div>
+                    <div class="insight-content">
+                        <h4>Trend Analizi</h4>
+                        <p>Son 6 ayda sürdürülebilir malzeme kullanımı %45 artış gösterdi.</p>
+                        <span class="pill success">Pozitif</span>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-icon">🎯</div>
+                    <div class="insight-content">
+                        <h4>Optimizasyon Önerisi</h4>
+                        <p>Kenevir lifi kullanarak toplam çevresel etkiyi %38 azaltabilirsiniz.</p>
+                        <span class="pill success">Yüksek Potansiyel</span>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-icon">⚡</div>
+                    <div class="insight-content">
+                        <h4>Hızlı İyileştirme</h4>
+                        <p>Boyama sürecinde doğal boyalar kullanarak CO₂e emisyonunu %15 düşürün.</p>
+                        <span class="pill info">Kolay</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Impact Analysis Chart
+const impactCtx = document.getElementById('impactChart').getContext('2d');
+const impactChart = new Chart(impactCtx, {
+    type: 'radar',
+    data: {
+        labels: ['Hammadde', 'Üretim', 'Boyama', 'Paketleme', 'Nakliye', 'Kullanım', 'Atık'],
+        datasets: [{
+            label: 'Mevcut Ürün',
+            data: [8.2, 7.5, 6.8, 8.9, 7.2, 9.1, 8.5],
+            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(59, 130, 246, 1)'
+        }, {
+            label: 'Sektör Ortalaması',
+            data: [5.2, 4.8, 4.2, 6.1, 5.5, 6.8, 5.9],
+            backgroundColor: 'rgba(239, 68, 68, 0.2)',
+            borderColor: 'rgba(239, 68, 68, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(239, 68, 68, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(239, 68, 68, 1)'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: {
+                    color: '#e5e7eb'
+                }
+            }
+        },
+        scales: {
+            r: {
+                angleLines: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                },
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                },
+                pointLabels: {
+                    color: '#9ca3af',
+                    font: {
+                        size: 12
+                    }
+                },
+                ticks: {
+                    color: '#6b7280',
+                    backdropColor: 'transparent'
+                }
+            }
+        }
+    }
+});
+</script>
+
+<style>
+.analysis-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.analysis-container {
+    padding: 16px;
+}
+
+.product-selector {
+    margin-bottom: 24px;
+}
+
+.product-selector h4 {
+    margin: 0 0 8px 0;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-select {
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: var(--ink);
+    font-size: 14px;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.analysis-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.metric-card {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.metric-card h5 {
+    margin: 0 0 8px 0;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.metric-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+}
+
+.metric-trend {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.metric-trend.positive {
+    color: #10b981;
+}
+
+.metric-trend.negative {
+    color: #ef4444;
+}
+
+.chart-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.chart-container {
+    height: 300px;
+    padding: 16px;
+}
+
+.insights-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.insight-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.insight-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.insight-content h4 {
+    margin: 0 0 4px 0;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.insight-content p {
+    margin: 0 0 8px 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.pill.info {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+}
+
+.pill.danger {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+</style>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-leaf"></i>
+                    <span>Zero@Design</span>
+                </div>
+                <div class="footer-text">
+                    Sürdürülebilir tasarım ve karbon ayak izi ölçümü için gelişmiş analitik platform
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Gizlilik</a>
+                    <a href="#" class="footer-link">Şartlar</a>
+                    <a href="#" class="footer-link">Destek</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    
+</body>
+</html>

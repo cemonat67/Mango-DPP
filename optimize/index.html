@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSP Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+
+    
+    
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <!-- Navigation brand href fix -->
+            <a class="navbar-brand" href="/dashboard">
+                <div class="brand-icon">
+                    <img src="/static/images/logo.png" alt="Zero@Design Logo" class="logo-img">
+                </div>
+                <div class="brand-text">
+                    <div class="brand-title">Zero@Design Dashboard — Eco-Design @ Source</div>
+                    <div class="brand-subtitle">Sürdürülebilir tasarım ve karbon ayak izi ölçümü için gelişmiş analitik platform</div>
+                </div>
+            </a>
+
+            <!-- Navbar Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                </ul>
+
+                <!-- Language Selector -->
+                <div class="navbar-actions">
+                    <div class="lang">
+                        <span class="pill">TR</span>
+                        <span class="pill active" style="background: var(--brand); color: white;">EN</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+<div class="wrap">
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="row">
+            <div class="seg">
+                <button onclick="window.location.href='/'">Dashboard</button>
+                <button onclick="window.location.href='/analytics'">Analytics</button>
+                <button onclick="window.location.href='/design'">Design</button>
+                <button onclick="window.location.href='/analyze'">Analyze</button>
+                <button class="active">Optimize</button>
+                <button onclick="window.location.href='/report'">Report</button>
+                <button onclick="window.location.href='/export'">Export</button>
+                <button onclick="window.location.href='/settings/'">Settings</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Additional Navigation Row -->
+    <div class="hero">
+        <div class="row secondary">
+            <div class="seg">
+                <button onclick="window.location.href='/benchmark'">Benchmark</button>
+                <button onclick="window.location.href='/style_card'">Style Card</button>
+                <button onclick="window.location.href='/collection'">Collection</button>
+                <button onclick="window.location.href='/dpp'">DPP/NFT</button>
+                <button onclick="window.location.href='/blockchain_status'">Blockchain</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optimization KPIs -->
+    <div class="kpis">
+        <div class="kpi">
+            <div class="kpi-label">Optimizasyon Projeleri</div>
+            <div class="kpi-value">23</div>
+        </div>
+        <div class="kpi">
+            <div class="kpi-label">Ortalama İyileştirme (%)</div>
+            <div class="kpi-value">42</div>
+        </div>
+        <div class="kpi">
+            <div class="kpi-label">CO₂e Tasarrufu (t)</div>
+            <div class="kpi-value">89.3</div>
+        </div>
+        <div class="kpi">
+            <div class="kpi-label">Maliyet Tasarrufu (₺)</div>
+            <div class="kpi-value">156K</div>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="grid">
+        <!-- Optimization Engine -->
+        <div class="card">
+            <div class="card-header">
+                <h3>AI Optimizasyon Motoru</h3>
+                <div class="optimization-controls">
+                    <button class="btn btn-ghost">Yeni Optimizasyon</button>
+                    <button class="btn btn-ghost">Senaryolar</button>
+                    <button class="btn btn-primary">Optimize Et</button>
+                </div>
+            </div>
+            <div class="optimization-container">
+                <div class="optimization-targets">
+                    <h4>Optimizasyon Hedefleri</h4>
+                    <div class="target-grid">
+                        <div class="target-item">
+                            <input type="checkbox" id="co2" checked>
+                            <label for="co2">CO₂e Emisyonu</label>
+                            <span class="target-weight">Ağırlık: %35</span>
+                        </div>
+                        <div class="target-item">
+                            <input type="checkbox" id="water" checked>
+                            <label for="water">Su Tüketimi</label>
+                            <span class="target-weight">Ağırlık: %25</span>
+                        </div>
+                        <div class="target-item">
+                            <input type="checkbox" id="energy">
+                            <label for="energy">Enerji Kullanımı</label>
+                            <span class="target-weight">Ağırlık: %20</span>
+                        </div>
+                        <div class="target-item">
+                            <input type="checkbox" id="cost" checked>
+                            <label for="cost">Maliyet</label>
+                            <span class="target-weight">Ağırlık: %20</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="optimization-progress">
+                    <h4>Optimizasyon Durumu</h4>
+                    <div class="progress-item">
+                        <span>Malzeme Optimizasyonu</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%"></div>
+                        </div>
+                        <span>85%</span>
+                    </div>
+                    <div class="progress-item">
+                        <span>Üretim Süreci</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 72%"></div>
+                        </div>
+                        <span>72%</span>
+                    </div>
+                    <div class="progress-item">
+                        <span>Lojistik</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 91%"></div>
+                        </div>
+                        <span>91%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optimization Results -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Optimizasyon Sonuçları</h3>
+                <div class="result-tabs">
+                    <button class="pill active">Mevcut</button>
+                    <button class="pill">Önerilen</button>
+                    <button class="pill">Karşılaştırma</button>
+                </div>
+            </div>
+            <div class="results-container">
+                <canvas id="optimizationChart" width="400" height="200"></canvas>
+                <div class="improvement-metrics">
+                    <div class="improvement-item">
+                        <div class="improvement-icon">📉</div>
+                        <div class="improvement-content">
+                            <h5>CO₂e Azalması</h5>
+                            <div class="improvement-value">-34%</div>
+                            <div class="improvement-detail">2.8 kg → 1.8 kg</div>
+                        </div>
+                    </div>
+                    <div class="improvement-item">
+                        <div class="improvement-icon">💧</div>
+                        <div class="improvement-content">
+                            <h5>Su Tasarrufu</h5>
+                            <div class="improvement-value">-28%</div>
+                            <div class="improvement-detail">1,240L → 890L</div>
+                        </div>
+                    </div>
+                    <div class="improvement-item">
+                        <div class="improvement-icon">💰</div>
+                        <div class="improvement-content">
+                            <h5>Maliyet Optimizasyonu</h5>
+                            <div class="improvement-value">-12%</div>
+                            <div class="improvement-detail">₺45 → ₺39.6</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secondary Grid -->
+    <div class="grid">
+        <!-- Optimization Scenarios -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Optimizasyon Senaryoları</h3>
+            </div>
+            <div class="scenarios-container">
+                <div class="scenario-item">
+                    <div class="scenario-header">
+                        <h4>Senaryo A: Malzeme Odaklı</h4>
+                        <span class="pill success">Önerilen</span>
+                    </div>
+                    <div class="scenario-metrics">
+                        <div class="scenario-metric">
+                            <span>CO₂e Azalması</span>
+                            <span class="metric-value">-38%</span>
+                        </div>
+                        <div class="scenario-metric">
+                            <span>Maliyet Etkisi</span>
+                            <span class="metric-value">+8%</span>
+                        </div>
+                        <div class="scenario-metric">
+                            <span>Uygulama Süresi</span>
+                            <span class="metric-value">2 hafta</span>
+                        </div>
+                    </div>
+                    <div class="scenario-actions">
+                        <button class="btn btn-ghost btn-sm">Detaylar</button>
+                        <button class="btn btn-primary btn-sm">Uygula</button>
+                    </div>
+                </div>
+                <div class="scenario-item">
+                    <div class="scenario-header">
+                        <h4>Senaryo B: Süreç Odaklı</h4>
+                        <span class="pill warning">Alternatif</span>
+                    </div>
+                    <div class="scenario-metrics">
+                        <div class="scenario-metric">
+                            <span>CO₂e Azalması</span>
+                            <span class="metric-value">-25%</span>
+                        </div>
+                        <div class="scenario-metric">
+                            <span>Maliyet Etkisi</span>
+                            <span class="metric-value">-5%</span>
+                        </div>
+                        <div class="scenario-metric">
+                            <span>Uygulama Süresi</span>
+                            <span class="metric-value">1 hafta</span>
+                        </div>
+                    </div>
+                    <div class="scenario-actions">
+                        <button class="btn btn-ghost btn-sm">Detaylar</button>
+                        <button class="btn btn-ghost btn-sm">Uygula</button>
+                    </div>
+                </div>
+                <div class="scenario-item">
+                    <div class="scenario-header">
+                        <h4>Senaryo C: Hibrit Yaklaşım</h4>
+                        <span class="pill info">Dengeli</span>
+                    </div>
+                    <div class="scenario-metrics">
+                        <div class="scenario-metric">
+                            <span>CO₂e Azalması</span>
+                            <span class="metric-value">-31%</span>
+                        </div>
+                        <div class="scenario-metric">
+                            <span>Maliyet Etkisi</span>
+                            <span class="metric-value">+2%</span>
+                        </div>
+                        <div class="scenario-metric">
+                            <span>Uygulama Süresi</span>
+                            <span class="metric-value">3 hafta</span>
+                        </div>
+                    </div>
+                    <div class="scenario-actions">
+                        <button class="btn btn-ghost btn-sm">Detaylar</button>
+                        <button class="btn btn-ghost btn-sm">Uygula</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Plan -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Eylem Planı</h3>
+            </div>
+            <div class="action-plan-container">
+                <div class="timeline">
+                    <div class="timeline-item completed">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h5>Mevcut Durum Analizi</h5>
+                            <p>Ürün yaşam döngüsü analizi tamamlandı</p>
+                            <span class="timeline-date">Tamamlandı</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item active">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h5>Malzeme Değişikliği</h5>
+                            <p>Organik pamuk yerine kenevir lifi kullanımı</p>
+                            <span class="timeline-date">Bu hafta</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h5>Üretim Süreci Optimizasyonu</h5>
+                            <p>Enerji verimliliği iyileştirmeleri</p>
+                            <span class="timeline-date">Gelecek hafta</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h5>Sonuç Değerlendirmesi</h5>
+                            <p>Optimizasyon etkilerinin ölçülmesi</p>
+                            <span class="timeline-date">3 hafta sonra</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Optimization Results Chart
+const optimizationCtx = document.getElementById('optimizationChart').getContext('2d');
+const optimizationChart = new Chart(optimizationCtx, {
+    type: 'bar',
+    data: {
+        labels: ['CO₂e (kg)', 'Su (L)', 'Enerji (kWh)', 'Maliyet (₺)', 'Atık (kg)'],
+        datasets: [{
+            label: 'Mevcut',
+            data: [2.8, 1240, 15.2, 45, 0.8],
+            backgroundColor: 'rgba(239, 68, 68, 0.8)',
+            borderColor: 'rgba(239, 68, 68, 1)',
+            borderWidth: 1
+        }, {
+            label: 'Optimize Edilmiş',
+            data: [1.8, 890, 12.1, 39.6, 0.5],
+            backgroundColor: 'rgba(34, 197, 94, 0.8)',
+            borderColor: 'rgba(34, 197, 94, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: {
+                    color: '#e5e7eb'
+                }
+            }
+        },
+        scales: {
+            x: {
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                    color: '#9ca3af'
+                }
+            },
+            y: {
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                    color: '#9ca3af'
+                }
+            }
+        }
+    }
+});
+</script>
+
+<style>
+.optimization-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.optimization-container {
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.optimization-targets h4,
+.optimization-progress h4 {
+    margin: 0 0 16px 0;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.target-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.target-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+}
+
+.target-item input[type="checkbox"] {
+    margin: 0;
+}
+
+.target-item label {
+    flex: 1;
+    color: var(--ink);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.target-weight {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.progress-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.progress-item span:first-child {
+    min-width: 120px;
+    color: var(--ink);
+    font-size: 13px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #10b981);
+    transition: width 0.3s ease;
+}
+
+.progress-item span:last-child {
+    min-width: 40px;
+    text-align: right;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.result-tabs {
+    display: flex;
+    gap: 8px;
+}
+
+.results-container {
+    padding: 16px;
+}
+
+.results-container canvas {
+    height: 200px !important;
+    margin-bottom: 24px;
+}
+
+.improvement-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.improvement-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.improvement-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.improvement-content h5 {
+    margin: 0 0 4px 0;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.improvement-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #10b981;
+    margin-bottom: 2px;
+}
+
+.improvement-detail {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.scenarios-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.scenario-item {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.scenario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.scenario-header h4 {
+    margin: 0;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.scenario-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.scenario-metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.scenario-metric span:first-child {
+    color: var(--muted);
+}
+
+.scenario-metric .metric-value {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.scenario-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.action-plan-container {
+    padding: 16px;
+}
+
+.timeline {
+    position: relative;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 24px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 8px;
+    top: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.timeline-item.completed .timeline-marker {
+    background: #10b981;
+}
+
+.timeline-item.active .timeline-marker {
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.timeline-content h5 {
+    margin: 0 0 4px 0;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.timeline-content p {
+    margin: 0 0 4px 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.timeline-date {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 12px;
+}
+</style>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-leaf"></i>
+                    <span>Zero@Design</span>
+                </div>
+                <div class="footer-text">
+                    Sürdürülebilir tasarım ve karbon ayak izi ölçümü için gelişmiş analitik platform
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Gizlilik</a>
+                    <a href="#" class="footer-link">Şartlar</a>
+                    <a href="#" class="footer-link">Destek</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    
+</body>
+</html>

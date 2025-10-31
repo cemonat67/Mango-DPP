@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero@Design — Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/vendor/bootstrap/css/bootstrap.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/static/vendor/fontawesome/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="/static/vendor/chartjs/chart.umd.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.e22de22e.css">
+    
+
+    
+    
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <a class="navbar-brand nav-link" href="/dashboard"><i class="bi bi-palette"></i> 
+                <div class="brand-icon">
+                    <img src="/static/images/logo.png" alt="Zero@Design" class="logo-img">
+                </div>
+                <div class="brand-text">
+                    <div class="brand-title">Zero@Design</div>
+                    <div class="brand-subtitle">Fashion Collection Carbon Footprint Calculator</div>
+                </div>
+            </a>
+
+            <!-- Navbar Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/benchmark/">
+                            <i class="fas fa-chart-bar"></i> Benchmark
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/style_card/">
+                            <i class="fas fa-id-card"></i> Style Card
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/collection/">
+                            <i class="fas fa-layer-group"></i> Collection
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dpp/">
+                            <i class="fas fa-certificate"></i> DPP/NFT
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/blockchain_status/">
+                            <i class="fas fa-cube"></i> Blockchain
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Action Buttons -->
+                <div class="navbar-actions">
+                    <div class="action-buttons">
+                        <button class="btn btn-ghost" onclick="window.location.href='/analytics'">Analytics</button>
+                        <button class="btn btn-ghost" onclick="window.location.href='/design'">Design</button>
+                        <button class="btn btn-ghost" onclick="window.location.href='/analyze'">Analyze</button>
+                        <button class="btn btn-ghost" onclick="window.location.href='/optimize'">Optimize</button>
+                        <button class="btn btn-ghost" onclick="window.location.href='/dpp'">DPP</button>
+                        <button class="btn btn-ghost" onclick="window.location.href='/blockchain_status'">Blockchain</button>
+                        <button class="btn btn-ghost" onclick="window.location.href='/report'">Report</button>
+                        <button class="btn btn-ghost" onclick="window.location.href='/export'">Export</button>
+                        <button class="btn btn-ghost" onclick="window.location.href='/settings'">Settings</button>
+                    </div>
+                    
+                    <!-- Language Selector -->
+                    <div class="lang">
+                        <span class="pill">TKEN</span>
+                        <span class="pill">TR</span>
+                        <span class="pill active" style="background: var(--brand); color: white;">EN</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container-xxl py-4">
+  <header class="mb-3">
+    <h1 class="display-6 fw-600">Dashboard</h1>
+    <p class="text-muted mb-0">Sürdürülebilir tasarım ve karbon ayak izi ölçümü için gelişmiş analitik platform</p>
+  </header>
+
+  <section class="row g-3 mb-3">
+    <div class="col-sm-6 col-lg-3"><div class="card shadow-sm h-100"><div class="card-body">
+      <div class="text-muted small">Toplam CO₂e (t)</div><div class="fs-4 fw-600">1.72</div>
+    </div></div></div>
+    <div class="col-sm-6 col-lg-3"><div class="card shadow-sm h-100"><div class="card-body">
+      <div class="text-muted small">Tasarım Skoru</div><div class="fs-4 fw-600">8.4</div>
+    </div></div></div>
+    <div class="col-sm-6 col-lg-3"><div class="card shadow-sm h-100"><div class="card-body">
+      <div class="text-muted small">Sürdürülebilirlik (%)</div><div class="fs-4 fw-600">87</div>
+    </div></div></div>
+    <div class="col-sm-6 col-lg-3"><div class="card shadow-sm h-100"><div class="card-body">
+      <div class="text-muted small">Maliyet Optimizasyonu (%)</div><div class="fs-4 fw-600">23.5</div>
+    </div></div></div>
+  </section>
+
+  <section class="mb-3">
+    <ul class="nav nav-pills">
+      <li class="nav-item"><a class="nav-link active nav-link" href="#tab-analytics" data-bs-toggle="tab"><i class="bi bi-graph-up-arrow"></i> Analytics</a></li>
+      <li class="nav-item"><a class="nav-link" href="#tab-report" data-bs-toggle="tab">Report</a></li>
+      <li class="nav-item"><a class="nav-link" href="#tab-export" data-bs-toggle="tab">Export</a></li>
+      <li class="nav-item"><a class="nav-link" href="#tab-settings" data-bs-toggle="tab">Settings</a></li>
+    </ul>
+  </section>
+
+  <div class="row g-3">
+    <div class="col-lg-8">
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h5 class="card-title mb-0">Tasarım Emisyonları — Kategori Bazında CO₂e</h5>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="normalizeCheck" checked>
+            <label class="form-check-label small" for="normalizeCheck">Yaşam döngüsü bazında normalize et</label>
+          </div>
+        </div>
+        <canvas id="chartByCategory" height="160"></canvas>
+      </div></div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <h5 class="card-title">Sürdürülebilirlik Tablosu</h5>
+        <div class="table-responsive">
+          <table class="table table-sm align-middle mb-0">
+            <thead class="text-muted">
+              <tr><th>Kategori</th><th>CO₂e (kg)</th><th>Skor</th><th>Sürdürülebilirlik (%)</th><th>Durum</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Kumaş Seçimi</td><td>154</td><td>8.2</td><td>85.4</td><td><span class="badge bg-success-subtle text-success">İyi</span></td></tr>
+              <tr><td>Üretim Süreci</td><td>573</td><td>7.8</td><td>78.2</td><td><span class="badge bg-success-subtle text-success">İyi</span></td></tr>
+              <tr><td>Boyama</td><td>130</td><td>6.8</td><td>68.0</td><td><span class="badge bg-warning-subtle text-warning">Orta</span></td></tr>
+              <tr><td>Paketleme</td><td>65</td><td>6.2</td><td>62.0</td><td><span class="badge bg-warning-subtle text-warning">Orta</span></td></tr>
+              <tr><td>Nakliye</td><td>218</td><td>6.9</td><td>69.1</td><td><span class="badge bg-success-subtle text-success">İyi</span></td></tr>
+              <tr><td>Geri Dönüşüm</td><td>58</td><td>8.9</td><td>89.3</td><td><span class="badge bg-success-subtle text-success">İyi</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</main>
+
+<scrt>
+  (function(){
+    if (!window.Chart) return;
+    const ctx = document.getElementById('chartByCategory'); if (!ctx) return;
+    new Chart(ctx, {
+      type: 'bar',
+      data: { labels: ['Kumaş','Üretim','Boyama','Paket','Nakliye','Geri Dönüşüm'],
+        datasets: [{ label: 'CO₂e (kg)', data: [572,589,130,65,218,58] }] },
+      options: { responsive:true, maintainAspectRatio:false }
+    });
+  })();
+</script>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-leaf"></i>
+                    <span>Zero@Design</span>
+                </div>
+                <div class="footer-text">
+                    Sürdürülebilir tasarım ve karbon ayak izi ölçümü için gelişmiş analitik platform
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Gizlilik</a>
+                    <a href="#" class="footer-link">Şartlar</a>
+                    <a href="#" class="footer-link">Destek</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+    
+    <script src="/static/js/main.js?v=20251007"></script>
+<script>
+(function () {
+  function norm(p) {
+    try {
+      const u = new URL(p, window.location.origin);
+      let path = u.pathname.toLowerCase();
+      path = path.replace(/\/index\.html?$/, '/');
+      if (path !== '/' && path.endsWith('/')) path = path.replace(/\/+$/, '/');
+      const map = {
+        '/index': '/', '/index/': '/',
+        '/dashboard': '/dashboard/', '/dashboard/': '/dashboard/',
+        '/benchmark': '/benchmark/', '/benchmark/': '/benchmark/',
+        '/style_card': '/style_card/', '/style_card/': '/style_card/',
+        '/collection': '/collection/', '/collection/': '/collection/',
+        '/dpp': '/dpp/', '/dpp/': '/dpp/',
+        '/blockchain_status': '/blockchain_status/', '/blockchain_status/': '/blockchain_status/'
+      };
+      return map[path] || path;
+    } catch (e) { return '/'; }
+  }
+
+  const current = norm(window.location.href);
+  document.querySelectorAll('a.nav-link').forEach(a => {
+    const target = norm(a.getAttribute('href') || a.href);
+    if (target === current) {
+      a.classList.add('active');
+      a.setAttribute('aria-current', 'page');
+    } else {
+      a.classList.remove('active');
+      a.removeAttribute('aria-current');
+    }
+  });
+})();
+</script>
+  <script src="/static/js/active-nav.js"></script>
+</body>
+</html><!-- === Zero@Design Demo CTA & Feature Tour === -->
+<div id="demo-cta" style="position:fixed;right:16px;bottom:16px;z-index:9999;background:#111;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.25);font:600 14px/1.3 system-ui;">
+  <div style="margin-bottom:8px;">You're viewing <b>Zero@Design — Demo Mode</b></div>
+  <div style="display:flex;gap:8px;">
+    <a href="https://cal.com/onatltd/demo" target="_blank" style="background:#fff;color:#111;padding:8px 10px;border-radius:8px;text-decoration:none;">Book a Call</a>
+    <a href="mailto:info@onatltd.com?subject=Zero@Design%20Live%20Access" style="border:1px solid #fff;color:#fff;padding:8px 10px;border-radius:8px;text-decoration:none;">Request Access</a>
+  </div>
+</div>
+<script>
+(function(){
+  const steps=[
+    {sel:'#hero, .hero',text:'Zero@Design — tasarım sürecinin “net-zero autopilot” yardımcısıdır.'},
+    {sel:'#kpi, .kpi',text:'Bu metrikler demo verileridir; canlı hesaplamalar Supabase üzerinden yapılır.'},
+    {sel:'#flow, .flow',text:'Uçtan uca izleme: design → process → impact → product passport.'},
+  ];
+  let i=0;
+  function show(){
+    const s=steps[i],el=document.querySelector(s.sel);
+    const tip=document.createElement('div');
+    tip.textContent=s.text;
+    tip.style.cssText="position:fixed;left:16px;bottom:16px;max-width:340px;padding:12px 14px;border-radius:12px;background:#fff;color:#111;box-shadow:0 10px 30px rgba(0,0,0,.2);font:500 14px/1.4 system-ui;z-index:9998";
+    const btn=document.createElement('button');
+    btn.textContent=(i<steps.length-1)?"Next →":"Done";
+    btn.style.cssText="margin-top:8px;background:#111;color:#fff;border:none;border-radius:8px;padding:8px 10px;cursor:pointer";
+    btn.onclick=()=>{tip.remove();if(++i<steps.length)show();};
+    tip.appendChild(document.createElement('br'));
+    tip.appendChild(btn);
+    document.body.appendChild(tip);
+    if(el){el.style.outline="2px solid #1113";setTimeout(()=>el.style.outline="",4000);}
+  }
+  setTimeout(show,1200);
+})();
+</script>
+<!-- === /Zero@Design Demo CTA & Feature Tour === -->
+<!-- === Zero@Design Demo CTA & Feature Tour === -->
+<div id="demo-cta" style="position:fixed;right:16px;bottom:16px;z-index:9999;background:#111;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.25);font:600 14px/1.3 system-ui;">
+  <div style="margin-bottom:8px;">You're viewing <b>Zero@Design — Demo Mode</b></div>
+  <div style="display:flex;gap:8px;">
+    <a href="https://cal.com/onatltd/demo" target="_blank" style="background:#fff;color:#111;padding:8px 10px;border-radius:8px;text-decoration:none;">Book a Call</a>
+    <a href="mailto:info@onatltd.com?subject=Zero@Design%20Live%20Access" style="border:1px solid #fff;color:#fff;padding:8px 10px;border-radius:8px;text-decoration:none;">Request Access</a>
+  </div>
+</div>
+<script>
+(function(){
+  const steps=[
+    {sel:'#hero, .hero',text:'Zero@Design — tasarım sürecinin “net-zero autopilot” yardımcısıdır.'},
+    {sel:'#kpi, .kpi',text:'Bu metrikler demo verileridir; canlı hesaplamalar Supabase üzerinde yapılır.'},
+    {sel:'#flow, .flow',text:'Uçtan uca izleme: design → process → impact → product passport.'},
+  ];
+  let i=0;
+  function show(){
+    const s=steps[i],el=document.querySelector(s.sel);
+    const tip=document.createElement('div');
+    tip.textContent=s.text;
+    tip.style.cssText="position:fixed;left:16px;bottom:16px;max-width:340px;padding:12px 14px;border-radius:12px;background:#fff;color:#111;box-shadow:0 10px 30px rgba(0,0,0,.2);font:500 14px/1.4 system-ui;z-index:9998";
+    const btn=document.createElement('button');
+    btn.textContent=(i<steps.length-1)?"Next →":"Done";
+    btn.style.cssText="margin-top:8px;background:#111;color:#fff;border:none;border-radius:8px;padding:8px 10px;cursor:pointer";
+    btn.onclick=()=>{tip.remove();if(++i<steps.length)show();};
+    tip.appendChild(document.createElement('br'));
+    tip.appendChild(btn);
+    document.body.appendChild(tip);
+    if(el){el.style.outline="2px solid #1113";setTimeout(()=>el.style.outline="",4000);}
+  }
+  setTimeout(show,1200);
+})();
+</script>
+<!-- === /Zero@Design Demo CTA & Feature Tour === -->

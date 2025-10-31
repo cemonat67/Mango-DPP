@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSP Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+
+    
+    
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <a class="navbar-brand" href="/dashboard">
+                <div class="brand-icon">
+                    <img src="/static/images/logo.png" alt="Zero@Design Logo" class="logo-img">
+                </div>
+                <div class="brand-text">
+                    <div class="brand-title">Zero@Design Dashboard — Eco-Design @ Source</div>
+                    <div class="brand-subtitle">Sürdürülebilir tasarım ve karbon ayak izi ölçümü için gelişmiş analitik platform</div>
+                </div>
+            </a>
+
+            <!-- Navbar Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                </ul>
+
+                <!-- Language Selector -->
+                <div class="navbar-actions">
+                    <div class="lang">
+                        <span class="pill">TR</span>
+                        <span class="pill active" style="background: var(--brand); color: white;">EN</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+<div class="wrap">
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="row">
+            <div class="seg">
+                <button onclick="window.location.href='/'">Dashboard</button>
+                <button onclick="window.location.href='/analytics'">Analytics</button>
+                <button onclick="window.location.href='/design'">Design</button>
+                <button onclick="window.location.href='/analyze'">Analyze</button>
+                <button onclick="window.location.href='/optimize'">Optimize</button>
+                <button class="active">Report</button>
+                <button onclick="window.location.href='/export'">Export</button>
+                <button onclick="window.location.href='/settings/'">Settings</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Additional Navigation Row -->
+    <div class="hero">
+        <div class="row secondary">
+            <div class="seg">
+                <button onclick="window.location.href='/benchmark'">Benchmark</button>
+                <button onclick="window.location.href='/style_card'">Style Card</button>
+                <button onclick="window.location.href='/collection'">Collection</button>
+                <button onclick="window.location.href='/dpp'">DPP/NFT</button>
+                <button onclick="window.location.href='/blockchain_status'">Blockchain</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report KPIs -->
+    <div class="kpis">
+        <div class="kpi">
+            <div class="kpi-label">Oluşturulan Raporlar</div>
+            <div class="kpi-value">47</div>
+        </div>
+        <div class="kpi">
+            <div class="kpi-label">Aktif Sertifikalar</div>
+            <div class="kpi-value">12</div>
+        </div>
+        <div class="kpi">
+            <div class="kpi-label">Uygunluk Oranı (%)</div>
+            <div class="kpi-value">94</div>
+        </div>
+        <div class="kpi">
+            <div class="kpi-label">İndirilen Raporlar</div>
+            <div class="kpi-value">156</div>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="grid">
+        <!-- Report Generator -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Rapor Oluşturucu</h3>
+                <div class="report-controls">
+                    <button class="btn btn-ghost">Şablon Seç</button>
+                    <button class="btn btn-primary">Rapor Oluştur</button>
+                </div>
+            </div>
+            <div class="report-generator">
+                <div class="report-config">
+                    <div class="config-section">
+                        <h4>Rapor Türü</h4>
+                        <div class="radio-group">
+                            <label class="radio-item">
+                                <input type="radio" name="reportType" value="lca" checked>
+                                <span>Yaşam Döngüsü Analizi (LCA)</span>
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="reportType" value="carbon">
+                                <span>Karbon Ayak İzi Raporu</span>
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="reportType" value="sustainability">
+                                <span>Sürdürülebilirlik Raporu</span>
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="reportType" value="compliance">
+                                <span>Uygunluk Raporu</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="config-section">
+                        <h4>Rapor Kapsamı</h4>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked>
+                                <span>Hammadde Analizi</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked>
+                                <span>Üretim Süreci</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox">
+                                <span>Lojistik & Nakliye</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked>
+                                <span>Kullanım Aşaması</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox">
+                                <span>Atık Yönetimi</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="config-section">
+                        <h4>Rapor Formatı</h4>
+                        <select class="form-select">
+                            <option>PDF - Detaylı Rapor</option>
+                            <option>Excel - Veri Tabloları</option>
+                            <option>PowerPoint - Sunum</option>
+                            <option>HTML - Web Raporu</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Templates -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Rapor Şablonları</h3>
+            </div>
+            <div class="templates-grid">
+                <div class="template-card">
+                    <div class="template-preview">
+                        <div class="template-icon">📊</div>
+                    </div>
+                    <div class="template-info">
+                        <h5>LCA Raporu</h5>
+                        <p>Kapsamlı yaşam döngüsü analizi</p>
+                        <div class="template-stats">
+                            <span>15 sayfa</span>
+                            <span>•</span>
+                            <span>47 kez kullanıldı</span>
+                        </div>
+                        <button class="btn btn-ghost btn-sm">Kullan</button>
+                    </div>
+                </div>
+                <div class="template-card">
+                    <div class="template-preview">
+                        <div class="template-icon">🌱</div>
+                    </div>
+                    <div class="template-info">
+                        <h5>Sürdürülebilirlik</h5>
+                        <p>ESG uyumlu sürdürülebilirlik raporu</p>
+                        <div class="template-stats">
+                            <span>22 sayfa</span>
+                            <span>•</span>
+                            <span>31 kez kullanıldı</span>
+                        </div>
+                        <button class="btn btn-ghost btn-sm">Kullan</button>
+                    </div>
+                </div>
+                <div class="template-card">
+                    <div class="template-preview">
+                        <div class="template-icon">📋</div>
+                    </div>
+                    <div class="template-info">
+                        <h5>Uygunluk Raporu</h5>
+                        <p>Yasal düzenlemelere uygunluk</p>
+                        <div class="template-stats">
+                            <span>8 sayfa</span>
+                            <span>•</span>
+                            <span>23 kez kullanıldı</span>
+                        </div>
+                        <button class="btn btn-ghost btn-sm">Kullan</button>
+                    </div>
+                </div>
+                <div class="template-card">
+                    <div class="template-preview">
+                        <div class="template-icon">🏆</div>
+                    </div>
+                    <div class="template-info">
+                        <h5>Sertifika Raporu</h5>
+                        <p>Sürdürülebilirlik sertifikası</p>
+                        <div class="template-stats">
+                            <span>3 sayfa</span>
+                            <span>•</span>
+                            <span>89 kez kullanıldı</span>
+                        </div>
+                        <button class="btn btn-ghost btn-sm">Kullan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secondary Grid -->
+    <div class="grid">
+        <!-- Recent Reports -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Son Raporlar</h3>
+            </div>
+            <div class="reports-list">
+                <div class="report-item">
+                    <div class="report-icon">📊</div>
+                    <div class="report-details">
+                        <h5>Organik Pamuk T-Shirt LCA</h5>
+                        <p>Yaşam döngüsü analizi raporu</p>
+                        <div class="report-meta">
+                            <span>2 gün önce</span>
+                            <span>•</span>
+                            <span>PDF, 15 sayfa</span>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="btn btn-ghost btn-sm">Görüntüle</button>
+                        <button class="btn btn-ghost btn-sm">İndir</button>
+                    </div>
+                </div>
+                <div class="report-item">
+                    <div class="report-icon">🌱</div>
+                    <div class="report-details">
+                        <h5>Q1 Sürdürülebilirlik Raporu</h5>
+                        <p>Çeyreklik sürdürülebilirlik değerlendirmesi</p>
+                        <div class="report-meta">
+                            <span>1 hafta önce</span>
+                            <span>•</span>
+                            <span>PDF, 28 sayfa</span>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="btn btn-ghost btn-sm">Görüntüle</button>
+                        <button class="btn btn-ghost btn-sm">İndir</button>
+                    </div>
+                </div>
+                <div class="report-item">
+                    <div class="report-icon">📋</div>
+                    <div class="report-details">
+                        <h5>REACH Uygunluk Raporu</h5>
+                        <p>Kimyasal madde uygunluk değerlendirmesi</p>
+                        <div class="report-meta">
+                            <span>2 hafta önce</span>
+                            <span>•</span>
+                            <span>PDF, 12 sayfa</span>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="btn btn-ghost btn-sm">Görüntüle</button>
+                        <button class="btn btn-ghost btn-sm">İndir</button>
+                    </div>
+                </div>
+                <div class="report-item">
+                    <div class="report-icon">🏆</div>
+                    <div class="report-details">
+                        <h5>Eco-Design Sertifikası</h5>
+                        <p>Sürdürülebilir tasarım sertifikası</p>
+                        <div class="report-meta">
+                            <span>3 hafta önce</span>
+                            <span>•</span>
+                            <span>PDF, 4 sayfa</span>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="btn btn-ghost btn-sm">Görüntüle</button>
+                        <button class="btn btn-ghost btn-sm">İndir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compliance Status -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Uygunluk Durumu</h3>
+            </div>
+            <div class="compliance-container">
+                <div class="compliance-item">
+                    <div class="compliance-header">
+                        <h4>REACH Yönetmeliği</h4>
+                        <span class="pill success">Uygun</span>
+                    </div>
+                    <div class="compliance-details">
+                        <p>Kimyasal madde kayıt ve değerlendirme uygunluğu</p>
+                        <div class="compliance-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                            <span>100%</span>
+                        </div>
+                        <div class="compliance-date">Son güncelleme: 15 Mart 2024</div>
+                    </div>
+                </div>
+                <div class="compliance-item">
+                    <div class="compliance-header">
+                        <h4>OEKO-TEX Standard</h4>
+                        <span class="pill success">Sertifikalı</span>
+                    </div>
+                    <div class="compliance-details">
+                        <p>Tekstil ürünleri için ekolojik standart</p>
+                        <div class="compliance-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 95%"></div>
+                            </div>
+                            <span>95%</span>
+                        </div>
+                        <div class="compliance-date">Sertifika geçerlilik: 2025</div>
+                    </div>
+                </div>
+                <div class="compliance-item">
+                    <div class="compliance-header">
+                        <h4>GOTS Sertifikası</h4>
+                        <span class="pill warning">Yenileme Gerekli</span>
+                    </div>
+                    <div class="compliance-details">
+                        <p>Global Organik Tekstil Standardı</p>
+                        <div class="compliance-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 78%"></div>
+                            </div>
+                            <span>78%</span>
+                        </div>
+                        <div class="compliance-date">Yenileme tarihi: 30 Nisan 2024</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.report-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.report-generator {
+    padding: 16px;
+}
+
+.report-config {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.config-section h4 {
+    margin: 0 0 12px 0;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.radio-group,
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.radio-item,
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.radio-item:hover,
+.checkbox-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.radio-item input,
+.checkbox-item input {
+    margin: 0;
+}
+
+.radio-item span,
+.checkbox-item span {
+    color: var(--ink);
+    font-size: 14px;
+}
+
+.form-select {
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: var(--ink);
+    font-size: 14px;
+}
+
+.templates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 16px;
+}
+
+.template-card {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.template-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(59, 130, 246, 0.5);
+}
+
+.template-preview {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px auto;
+}
+
+.template-icon {
+    font-size: 24px;
+}
+
+.template-info h5 {
+    margin: 0 0 4px 0;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.template-info p {
+    margin: 0 0 8px 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.template-stats {
+    margin-bottom: 12px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.reports-list {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.report-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.report-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.report-details {
+    flex: 1;
+}
+
+.report-details h5 {
+    margin: 0 0 4px 0;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.report-details p {
+    margin: 0 0 4px 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.report-meta {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.report-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.compliance-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.compliance-item {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.compliance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.compliance-header h4 {
+    margin: 0;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.compliance-details p {
+    margin: 0 0 12px 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.compliance-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.compliance-progress .progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.compliance-progress .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #10b981);
+}
+
+.compliance-progress span {
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 40px;
+    text-align: right;
+}
+
+.compliance-date {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 12px;
+}
+</style>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-leaf"></i>
+                    <span>Zero@Design</span>
+                </div>
+                <div class="footer-text">
+                    Sürdürülebilir tasarım ve karbon ayak izi ölçümü için gelişmiş analitik platform
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Gizlilik</a>
+                    <a href="#" class="footer-link">Şartlar</a>
+                    <a href="#" class="footer-link">Destek</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    
+</body>
+</html>
